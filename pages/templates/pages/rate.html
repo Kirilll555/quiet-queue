@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/rate_styles.css' %}">
+{% endblock %}
+
+{% block title %}Оценить очередь{% endblock %}
+
+{% block content %}
+    <section class="form-section">
+        <h1 class="section-title">Оценить загруженность</h1>
+        <form method="post" class="rate-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label">Выберите учреждение:</label>
+                <select class="form-select">
+                    <option>Поликлиника №3</option>
+                    <option>МФЦ Центральный</option>
+                    <option>Почтовое отделение №12</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <p class="form-label">Сколько сейчас людей?</p>
+                <div class="status-buttons">
+                    <button type="submit" name="status" value="green" class="btn btn-status-green">Спокойно</button>
+                    <button type="submit" name="status" value="yellow" class="btn btn-status-yellow">Средне</button>
+                    <button type="submit" name="status" value="red" class="btn btn-status-red">Много людей</button>
+                </div>
+            </div>
+        </form>
+    </section>
+{% endblock %}

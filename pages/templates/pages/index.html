@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/index_styles.css' %}">
+{% endblock %}
+
+{% block title %}Главная — Тихая очередь{% endblock %}
+
+{% block content %}
+    <section class="hero-section">
+        <h1 class="hero-title">Тихая очередь</h1>
+        <p class="hero-description">Узнайте реальную загруженность поликлиник и МФЦ. Планируйте визит, когда нет очередей.</p>
+        <a href="{% url 'suggest' %}" class="btn btn-secondary">Предложить учреждение</a>
+    </section>
+
+    <section class="institutions-section">
+        <h2 class="section-title">Сейчас рядом с вами</h2>
+    </section>
+{% endblock %}

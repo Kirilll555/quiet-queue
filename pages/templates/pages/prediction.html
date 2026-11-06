@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/ai_styles.css' %}">
+{% endblock %}
+
+{% block title %}Прогноз ИИ{% endblock %}
+
+{% block content %}
+    <section class="ai-section">
+        <h1 class="section-title">Анализ нейросети</h1>
+        
+        <div class="ai-chat-box">
+            <div class="ai-avatar">🤖</div>
+            <div class="ai-message">
+                <p>{{ ai_text }}</p>
+            </div>
+        </div>
+        
+        <div class="ai-actions">
+            <a href="{% url 'index' %}" class="btn btn-secondary">Вернуться на главную</a>
+        </div>
+    </section>
+{% endblock %}

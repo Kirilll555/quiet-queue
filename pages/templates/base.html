@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Тихая очередь{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/base_styles.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    {% include 'menu.html' %}
+
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>© 2026 Тихая очередь. Учебный проект.</p>
+    </footer>
+
+</body>
+</html>

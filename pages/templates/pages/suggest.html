@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/suggest_styles.css' %}">
+{% endblock %}
+
+{% block title %}Предложить учреждение{% endblock %}
+
+{% block content %}
+    <section class="form-section">
+        <h1 class="section-title">Предложить учреждение</h1>
+        <p class="form-description">Заполните форму, и мы добавим его на сайт после проверки модератором.</p>
+        <form method="post" class="suggest-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label">Название учреждения:</label>
+                <input type="text" class="form-input" placeholder="Например: Поликлиника №5">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Адрес:</label>
+                <input type="text" class="form-input" placeholder="ул. Пушкина, 10">
+            </div>
+            <button type="submit" class="btn btn-primary">Отправить на проверку</button>
+        </form>
+    </section>
+{% endblock %}
