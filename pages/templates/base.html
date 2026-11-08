@@ -15,6 +15,18 @@
     {% include 'menu.html' %}
 
     <main class="main-content">
+        {% if messages %}
+    <div class="flash-messages" aria-live="polite">
+        {% for message in messages %}
+            <p
+                class="flash-message flash-message--{{ message.tags }}"
+                {% if message.tags == "error" %}role="alert"{% else %}role="status"{% endif %}
+            >
+                {{ message }}
+            </p>
+        {% endfor %}
+    </div>
+{% endif %}
         {% block content %}
         {% endblock %}
     </main>

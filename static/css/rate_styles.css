@@ -1,0 +1,98 @@
+.form-section {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: clamp(24px, 5vw, 40px);
+    border: 1px solid #dfe5eb;
+    border-radius: 18px;
+    background: #ffffff;
+}
+
+.form-section .section-title {
+    margin: 0 0 14px;
+    color: #17324d;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+}
+
+.form-description {
+    margin: 0 0 28px;
+    color: #475467;
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.rate-form {
+    display: grid;
+    gap: 26px;
+}
+
+.form-group {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+}
+
+.form-label {
+    color: #1d2939;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.form-select {
+    width: 100%;
+    min-height: 48px;
+    padding: 10px 12px;
+    border: 1px solid #b8c4ce;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #1d2939;
+    font: inherit;
+}
+
+.status-fieldset {
+    min-width: 0;
+    padding: 0;
+    border: 0;
+}
+
+.status-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.status-buttons .btn {
+    min-height: 58px;
+    text-align: center;
+}
+
+.btn-status-low {
+    border-color: #badac7;
+    background: #e8f5ec;
+    color: #17643a;
+}
+
+.btn-status-medium {
+    border-color: #f0d58c;
+    background: #fff4d6;
+    color: #765000;
+}
+
+.btn-status-high {
+    border-color: #efc2bd;
+    background: #fdecea;
+    color: #9b2c23;
+}
+
+.status-buttons .btn:hover {
+    filter: brightness(0.96);
+}
+
+@media (max-width: 600px) {
+    .form-section {
+        padding: 24px 18px;
+    }
+
+    .status-buttons {
+        grid-template-columns: 1fr;
+    }
+}

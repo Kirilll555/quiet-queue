@@ -5,29 +5,89 @@
     <link rel="stylesheet" href="{% static 'css/rate_styles.css' %}">
 {% endblock %}
 
-{% block title %}Оценить очередь{% endblock %}
+{% block title %}Оценить очередь — Тихая очередь{% endblock %}
 
 {% block content %}
     <section class="form-section">
-        <h1 class="section-title">Оценить загруженность</h1>
+        <p class="eyebrow">Демо-режим</p>
+        <h1 class="section-title">Сообщить о загруженности</h1>
+        <p class="form-description">
+            Выберите учреждение и укажите, насколько сейчас загружена очередь.
+        </p>
+
         <form method="post" class="rate-form">
             {% csrf_token %}
+
             <div class="form-group">
-                <label class="form-label">Выберите учреждение:</label>
-                <select class="form-select">
-                    <option>Поликлиника №3</option>
-                    <option>МФЦ Центральный</option>
-                    <option>Почтовое отделение №12</option>
+                <label for="institution_id" class="form-label">
+                    Учреждение
+                </label>
+
+                <select
+                    id="institution_id"
+                    name="institution_id"
+                    class="form-select"
+                    required
+                >
+                    <option
+                        value=""
+                        {% if not request.GET.institution_id %}selected{% endif %}
+                    >
+                        Выберите учреждение
+                    </option>
+
+                    <option value="1" {% if request.GET.institution_id == "1" %}selected{% endif %}>
+                        Поликлиника №1 (демо)
+                    </option>
+                    <option value="2" {% if request.GET.institution_id == "2" %}selected{% endif %}>
+                        Поликлиника №2 (демо)
+                    </option>
+                    <option value="3" {% if request.GET.institution_id == "3" %}selected{% endif %}>
+                        Поликлиника №3 (демо)
+                    </option>
+                    <option value="4" {% if request.GET.institution_id == "4" %}selected{% endif %}>
+                        МФЦ «Центральный» (демо)
+                    </option>
+                    <option value="5" {% if request.GET.institution_id == "5" %}selected{% endif %}>
+                        МФЦ №2 (демо)
+                    </option>
                 </select>
             </div>
-            <div class="form-group">
-                <p class="form-label">Сколько сейчас людей?</p>
+
+            <fieldset class="form-group status-fieldset">
+                <legend class="form-label">
+                    Какова сейчас загруженность?
+                </legend>
+
                 <div class="status-buttons">
-                    <button type="submit" name="status" value="green" class="btn btn-status-green">Спокойно</button>
-                    <button type="submit" name="status" value="yellow" class="btn btn-status-yellow">Средне</button>
-                    <button type="submit" name="status" value="red" class="btn btn-status-red">Много людей</button>
+                    <button
+                        type="submit"
+                        name="queue_level"
+                        value="low"
+                        class="btn btn-status-low"
+                    >
+                        Небольшая очередь
+                    </button>
+
+                    <button
+                        type="submit"
+                        name="queue_level"
+                        value="medium"
+                        class="btn btn-status-medium"
+                    >
+                        Умеренная очередь
+                    </button>
+
+                    <button
+                        type="submit"
+                        name="queue_level"
+                        value="high"
+                        class="btn btn-status-high"
+                    >
+                        Много людей
+                    </button>
                 </div>
-            </div>
+            </fieldset>
         </form>
     </section>
 {% endblock %}

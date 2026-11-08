@@ -9,12 +9,82 @@
 
 {% block content %}
     <section class="hero-section">
-        <h1 class="hero-title">Тихая очередь</h1>
-        <p class="hero-description">Узнайте реальную загруженность поликлиник и МФЦ. Планируйте визит, когда нет очередей.</p>
-        <a href="{% url 'suggest' %}" class="btn btn-secondary">Предложить учреждение</a>
+        <p class="eyebrow">Махачкала · социальные учреждения</p>
+        <h1 class="hero-title">Планируйте визит спокойнее</h1>
+        <p class="hero-description">
+            Посмотрите демонстрационную загруженность учреждений
+            и сообщите другим посетителям о ситуации в очереди.
+        </p>
+
+        <div class="hero-actions">
+            <a href="#institutions" class="btn btn-primary">
+                Найти учреждение
+            </a>
+            <a href="{% url 'suggest' %}" class="btn btn-secondary">
+                Предложить учреждение
+            </a>
+        </div>
+
+        <p class="demo-notice">
+            <strong>Демо-режим.</strong>
+            Показанные статусы и отметки учебные и не отражают реальную ситуацию.
+        </p>
     </section>
 
-    <section class="institutions-section">
-        <h2 class="section-title">Сейчас рядом с вами</h2>
+    <section class="institutions-section" id="institutions">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Каталог</p>
+                <h2 class="section-title">Учреждения</h2>
+            </div>
+            <p>Выберите место, чтобы сообщить о загруженности.</p>
+        </div>
+
+        <div class="institution-grid">
+            {% for institution in institutions %}
+                <article class="institution-card">
+                    <div class="institution-card-top">
+                        <span class="institution-category">
+                            {{ institution.category }}
+                        </span>
+
+                        <span class="status-pill status-pill--{{ institution.queue_level }}">
+                            <span class="status-dot" aria-hidden="true"></span>
+                            {{ institution.queue_label }}
+                        </span>
+                    </div>
+
+                    <h3 class="institution-name">{{ institution.name }}</h3>
+
+                    <div class="institution-card-details">
+                        <p>
+                            <span>
+                                {% if institution.reports_count %}
+                                    Последняя отметка
+                                {% else %}
+                                    Свежесть данных
+                                {% endif %}
+                            </span>
+                            <strong>{{ institution.updated_label }}</strong>
+                        </p>
+                        <p>
+                            <span>Отметок за час</span>
+                            <strong>{{ institution.reports_count }}</strong>
+                        </p>
+                    </div>
+
+                    <a
+                        href="{% url 'rate' %}?institution_id={{ institution.id }}"
+                        class="btn btn-secondary institution-action"
+                    >
+                        Сообщить о ситуации
+                    </a>
+                </article>
+            {% empty %}
+                <p class="empty-state">
+                    Пока нет учреждений для отображения.
+                </p>
+            {% endfor %}
+        </div>
     </section>
 {% endblock %}
