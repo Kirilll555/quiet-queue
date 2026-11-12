@@ -35,6 +35,21 @@ def index(request):
         },
     ]
 
+    query = request.GET.get("q", "").strip()
+    category = request.GET.get("category", "")
+
+    if query:
+        institutions = [
+            item for item in institutions
+            if query.casefold() in item["name"].casefold()
+        ]
+
+    if category:
+        institutions = [
+            item for item in institutions
+            if item["category"] == category
+        ]
+
     one_hour_ago = timezone.now() - timedelta(hours=1)
 
     for institution in institutions:
@@ -57,7 +72,11 @@ def index(request):
             institution["queue_label"] = "Нет свежих отметок"
             institution["updated_label"] = "Нет отметок за последний час"
 
-    return render(request, "pages/index.html", {"institutions": institutions})
+    return render(request, "pages/index.html", {
+        "institutions": institutions,
+        "query": query,
+        "category": category,
+    })
 
 def rate_queue(request):
     if request.method == "POST":

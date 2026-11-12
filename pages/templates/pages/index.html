@@ -39,7 +39,28 @@
             </div>
             <p>Выберите место, чтобы сообщить о загруженности.</p>
         </div>
+        <form method="get" action="{% url 'index' %}#institutions" class="catalog-filters">
+            <label>
+                Название учреждения
+                <input type="search" name="q" value="{{ query }}" placeholder="Например, Центральный">
+            </label>
 
+            <label>
+                Тип учреждения
+                <select name="category">
+                    <option value="">Все</option>
+                    <option value="Поликлиника" {% if category == "Поликлиника" %}selected{% endif %}>
+                        Поликлиники
+                    </option>
+                    <option value="МФЦ" {% if category == "МФЦ" %}selected{% endif %}>
+                        МФЦ
+                    </option>
+                </select>
+            </label>
+
+            <button type="submit" class="btn btn-primary">Найти</button>
+            <a href="{% url 'index' %}#institutions" class="btn btn-secondary">Сбросить</a>
+        </form>
         <div class="institution-grid">
             {% for institution in institutions %}
                 <article class="institution-card">
@@ -82,7 +103,7 @@
                 </article>
             {% empty %}
                 <p class="empty-state">
-                    Пока нет учреждений для отображения.
+                    Учреждений по вашему запросу не найдено. Попробуйте изменить название или тип.
                 </p>
             {% endfor %}
         </div>
