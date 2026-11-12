@@ -29,28 +29,18 @@
                     class="form-select"
                     required
                 >
-                    <option
-                        value=""
-                        {% if not request.GET.institution_id %}selected{% endif %}
-                    >
+                    <option value="" {% if not request.GET.institution_id %}selected{% endif %}>
                         Выберите учреждение
                     </option>
 
-                    <option value="1" {% if request.GET.institution_id == "1" %}selected{% endif %}>
-                        Поликлиника №1 (демо)
-                    </option>
-                    <option value="2" {% if request.GET.institution_id == "2" %}selected{% endif %}>
-                        Поликлиника №2 (демо)
-                    </option>
-                    <option value="3" {% if request.GET.institution_id == "3" %}selected{% endif %}>
-                        Поликлиника №3 (демо)
-                    </option>
-                    <option value="4" {% if request.GET.institution_id == "4" %}selected{% endif %}>
-                        МФЦ «Центральный» (демо)
-                    </option>
-                    <option value="5" {% if request.GET.institution_id == "5" %}selected{% endif %}>
-                        МФЦ №2 (демо)
-                    </option>
+                    {% for inst in institutions %}
+                        <option
+                            value="{{ inst.id }}"
+                            {% if request.GET.institution_id|stringformat:"s" == inst.id|stringformat:"s" %}selected{% endif %}
+                        >
+                            {{ inst.name }} ({{ inst.category }})
+                        </option>
+                    {% endfor %}
                 </select>
             </div>
 
@@ -65,6 +55,7 @@
                         name="queue_level"
                         value="low"
                         class="btn btn-status-low"
+                        aria-label="Отметить небольшую очередь"
                     >
                         Небольшая очередь
                     </button>
@@ -74,6 +65,7 @@
                         name="queue_level"
                         value="medium"
                         class="btn btn-status-medium"
+                        aria-label="Отметить умеренную очередь"
                     >
                         Умеренная очередь
                     </button>
@@ -83,6 +75,7 @@
                         name="queue_level"
                         value="high"
                         class="btn btn-status-high"
+                        aria-label="Отметить много людей"
                     >
                         Много людей
                     </button>

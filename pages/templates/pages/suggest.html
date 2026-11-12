@@ -13,14 +13,23 @@
         <p class="form-description">Заполните форму, и мы добавим его на сайт после проверки модератором.</p>
         <form method="post" class="suggest-form">
             {% csrf_token %}
+
             <div class="form-group">
-                <label class="form-label">Название учреждения:</label>
-                <input type="text" class="form-input" placeholder="Например: Поликлиника №5">
+                <label class="form-label" for="name">Название учреждения:</label>
+                <input type="text" id="name" name="name" class="form-input" placeholder="Например: Поликлиника №5" required>
             </div>
+
             <div class="form-group">
-                <label class="form-label">Адрес:</label>
-                <input type="text" class="form-input" placeholder="ул. Пушкина, 10">
+                <label class="form-label" for="category">Тип учреждения:</label>
+                <select id="category" name="category" class="form-select" required>
+                    <option value="" disabled selected>Выберите тип</option>
+                    <option value="Поликлиника">Поликлиника</option>
+                    <option value="МФЦ">МФЦ</option>
+                    <option value="Почта">Почта</option>
+                    <option value="Другое">Другое</option>
+                </select>
             </div>
+
             <button type="submit" class="btn btn-primary">Отправить на проверку</button>
         </form>
     </section>

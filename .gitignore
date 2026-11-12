@@ -1,7 +1,13 @@
 .venv/
+venv/
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 db.sqlite3
+db.sqlite3-journal
 .env
-.vscode/
 .idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
