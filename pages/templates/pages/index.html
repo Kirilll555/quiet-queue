@@ -39,6 +39,7 @@
             </div>
             <p>Выберите место, чтобы сообщить о загруженности.</p>
         </div>
+
         <form method="get" action="{% url 'index' %}#institutions" class="catalog-filters">
             <label>
                 Название учреждения
@@ -61,6 +62,7 @@
             <button type="submit" class="btn btn-primary">Найти</button>
             <a href="{% url 'index' %}#institutions" class="btn btn-secondary">Сбросить</a>
         </form>
+
         <div class="institution-grid">
             {% for institution in institutions %}
                 <article class="institution-card">
@@ -76,6 +78,18 @@
                     </div>
 
                     <h3 class="institution-name">{{ institution.name }}</h3>
+
+                    <p class="institution-address">📍 {{ institution.address }}</p>
+                    <p class="institution-hours">🕒 {{ institution.working_hours }}</p>
+
+                    <div class="institution-cabinets">
+                        Кабинеты:
+                        {% for cabinet in institution.cabinets.all %}
+                            {{ cabinet.name }}{% if not forloop.last %}, {% endif %}
+                        {% empty %}
+                            Нет данных
+                        {% endfor %}
+                    </div>
 
                     <div class="institution-card-details">
                         <p>

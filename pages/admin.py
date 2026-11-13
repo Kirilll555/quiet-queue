@@ -1,16 +1,20 @@
 from django.contrib import admin
-from .models import Institution, QueueReport, InstitutionRequest
+from .models import Institution, QueueReport, InstitutionRequest, Cabinet
 
 @admin.register(Institution)
 class InstitutionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'category')
-    search_fields = ('name',)
+    list_display = ('id', 'name', 'category', 'address', 'working_hours')
+    search_fields = ('name', 'address')
+
+@admin.register(Cabinet)
+class CabinetAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'institution', 'cabinet_type')
+    list_filter = ('institution',)
 
 @admin.register(QueueReport)
 class QueueReportAdmin(admin.ModelAdmin):
-    list_display = ('institution', 'queue_level', 'created_at')
-    list_filter = ('queue_level', 'institution')
-
+    list_display = ('institution', 'cabinet', 'queue_level', 'created_at')
+    list_filter = ('queue_level', 'institution', 'cabinet')
 
 @admin.register(InstitutionRequest)
 class InstitutionRequestAdmin(admin.ModelAdmin):
@@ -30,5 +34,4 @@ class InstitutionRequestAdmin(admin.ModelAdmin):
                 req.is_processed = True
                 req.save()
                 approved_count += 1
-
         self.message_user(request, f"Успешно добавлено учреждений: {approved_count}")
