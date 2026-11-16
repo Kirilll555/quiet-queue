@@ -29,21 +29,45 @@
                     class="form-select"
                     required
                 >
-                    <option value="" {% if not request.GET.institution_id %}selected{% endif %}>
+                    <option value="" {% if not selected_institution_id %}selected{% endif %}>
                         Выберите учреждение
                     </option>
 
                     {% for inst in institutions %}
                         <option
                             value="{{ inst.id }}"
-                            {% if request.GET.institution_id|stringformat:"s" == inst.id|stringformat:"s" %}selected{% endif %}
+                            {% if selected_institution_id|stringformat:"s" == inst.id|stringformat:"s" %}selected{% endif %}
                         >
                             {{ inst.name }} ({{ inst.category }})
                         </option>
                     {% endfor %}
                 </select>
             </div>
+            <div class="form-group">
+                <label for="cabinet_id" class="form-label">
+                    Кабинет — необязательно
+                </label>
 
+                <select
+                    id="cabinet_id"
+                    name="cabinet_id"
+                    class="form-select"
+                    aria-describedby="cabinet-hint"
+                    data-selected-cabinet="{{ selected_cabinet_id }}"
+                    disabled
+                >
+                    <option value="">Сначала выберите учреждение</option>
+                </select>
+
+                <p id="cabinet-hint" class="form-hint" aria-live="polite">
+                    Можно оставить отметку без указания кабинета.
+                </p>
+
+                <noscript>
+                    Выбор кабинета требует JavaScript.
+                    Без него можно отправить отметку для учреждения.
+                </noscript>
+            </div>
             <fieldset class="form-group status-fieldset">
                 <legend class="form-label">
                     Какова сейчас загруженность?
@@ -83,4 +107,7 @@
             </fieldset>
         </form>
     </section>
+
+    {{ cabinets_data|json_script:"cabinets-data" }}
+    <script src="{% static 'js/rate.js' %}" defer></script>
 {% endblock %}

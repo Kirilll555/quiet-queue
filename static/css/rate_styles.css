@@ -96,3 +96,15 @@
         grid-template-columns: 1fr;
     }
 }
+.form-hint {
+    margin: 0;
+    color: #52606d;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.form-select:disabled {
+    background: #f2f4f7;
+    color: #667085;
+    cursor: not-allowed;
+}

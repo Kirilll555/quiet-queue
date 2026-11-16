@@ -4,7 +4,7 @@ from django.urls import reverse
 from datetime import timedelta
 from django.utils import timezone
 
-from .models import Institution, QueueReport, InstitutionRequest
+from .models import Cabinet, Institution, QueueReport, InstitutionRequest
 
 
 def index(request):
@@ -44,33 +44,86 @@ def index(request):
 
 
 def rate_queue(request):
-    institutions = Institution.objects.all()
+    institutions = Institution.objects.order_by("name")
+    cabinets_data = list(
+        Cabinet.objects.order_by("name").values(
+            "id", "name", "cabinet_type", "institution_id"
+        )
+    )
+
+    selected_institution_id = request.GET.get("institution_id", "")
+    selected_cabinet_id = ""
 
     if request.method == "POST":
-        institution_id = request.POST.get("institution_id", "")
+        selected_institution_id = request.POST.get("institution_id", "")
+        selected_cabinet_id = request.POST.get("cabinet_id", "")
         queue_level = request.POST.get("queue_level", "")
 
-        valid_queue_levels = {"low", "medium", "high"}
+        institution = None
+        cabinet = None
+        error = ""
 
-        if not institution_id:
-            messages.error(request, "Пожалуйста, выберите учреждение.")
-            return redirect("rate")
+        try:
+            institution_id = int(selected_institution_id)
+        except (ValueError, TypeError):
+            error = "Пожалуйста, выберите учреждение."
+        else:
+            institution = Institution.objects.filter(
+                id=institution_id
+            ).first()
 
-        if queue_level not in valid_queue_levels:
-            messages.error(request, "Пожалуйста, выберите уровень загруженности.")
-            return redirect(f"{reverse('rate')}?institution_id={institution_id}")
+            if institution is None:
+                error = "Учреждение не найдено. Выберите другое."
 
-        institution = get_object_or_404(Institution, id=institution_id)
+        if not error and selected_cabinet_id:
+            try:
+                cabinet_id = int(selected_cabinet_id)
+            except (ValueError, TypeError):
+                error = "Пожалуйста, выберите кабинет из списка."
+            else:
+                cabinet = Cabinet.objects.filter(
+                    id=cabinet_id,
+                    institution=institution,
+                ).first()
 
-        QueueReport.objects.create(
-            institution=institution,
-            queue_level=queue_level,
-        )
+                if cabinet is None:
+                    error = "Выбранный кабинет не относится к этому учреждению."
+                    selected_cabinet_id = ""
 
-        messages.success(request, f"Спасибо! Отметка для {institution.name} сохранена.")
-        return redirect(f"{reverse('rate')}?institution_id={institution.id}")
+        valid_queue_levels = {
+            value for value, label in QueueReport.QUEUE_LEVEL_CHOICES
+        }
 
-    return render(request, "pages/rate.html", {"institutions": institutions})
+        if not error and queue_level not in valid_queue_levels:
+            error = "Пожалуйста, выберите уровень загруженности."
+
+        if error:
+            messages.error(request, error)
+        else:
+            QueueReport.objects.create(
+                institution=institution,
+                cabinet=cabinet,
+                queue_level=queue_level,
+            )
+
+            location = institution.name
+            if cabinet is not None:
+                location = f"{institution.name}, {cabinet.name}"
+
+            messages.success(
+                request,
+                f"Спасибо! Отметка для {location} сохранена.",
+            )
+            return redirect(
+                f"{reverse('rate')}?institution_id={institution.id}"
+            )
+
+    return render(request, "pages/rate.html", {
+        "institutions": institutions,
+        "cabinets_data": cabinets_data,
+        "selected_institution_id": selected_institution_id,
+        "selected_cabinet_id": selected_cabinet_id,
+    })
 
 
 def suggest_institution(request):
