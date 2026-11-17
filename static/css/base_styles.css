@@ -171,3 +171,14 @@ select:focus-visible {
     background: #fdecea;
     color: #9b2c23;
 }
+
+.logout-form {
+    margin: 0;
+}
+
+.nav-username {
+    display: inline-block;
+    max-width: 160px;
+    overflow-wrap: anywhere;
+    color: #52606d;
+}

@@ -134,3 +134,7 @@ STATICFILES_DIRS = [
 ]
 
 YANDEX_MAPS_API_KEY = os.environ.get("YANDEX_MAPS_API_KEY", "")
+
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "index"
+LOGOUT_REDIRECT_URL = "index"

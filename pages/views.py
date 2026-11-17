@@ -7,6 +7,7 @@ from django.db.models import Prefetch
 from django.conf import settings
 
 from .models import Cabinet, Institution, QueueReport, InstitutionRequest
+from .forms import SignUpForm
 
 
 def index(request):
@@ -204,3 +205,24 @@ def suggest_institution(request):
 def ai_prediction(request):
     ai_response = "ИИ проанализировал данные. Лучшее время для визита — завтра с утра."
     return render(request, 'pages/prediction.html', {'ai_text': ai_response})
+
+def register(request):
+    if request.user.is_authenticated:
+        return redirect("index")
+
+    form = SignUpForm(
+        request.POST if request.method == "POST" else None
+    )
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(
+            request,
+            "Аккаунт создан. Войдите под своим ником и паролем.",
+        )
+        return redirect("login")
+
+    return render(request, "pages/auth.html", {
+        "form": form,
+        "is_signup": True,
+    })
