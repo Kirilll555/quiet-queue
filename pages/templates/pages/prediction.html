@@ -5,21 +5,116 @@
     <link rel="stylesheet" href="{% static 'css/ai_styles.css' %}">
 {% endblock %}
 
-{% block title %}Прогноз ИИ{% endblock %}
+{% block title %}Прогноз загруженности — Тихая очередь{% endblock %}
 
 {% block content %}
-    <section class="ai-section">
-        <h1 class="section-title">Анализ нейросети</h1>
-        
-        <div class="ai-chat-box">
-            <div class="ai-avatar">🤖</div>
-            <div class="ai-message">
-                <p>{{ ai_text }}</p>
-            </div>
-        </div>
-        
-        <div class="ai-actions">
-            <a href="{% url 'index' %}" class="btn btn-secondary">Вернуться на главную</a>
-        </div>
+    <section class="forecast-section">
+        <h1>Когда лучше запланировать визит</h1>
+
+        <p class="forecast-intro">
+            Статистический прогноз по истории оценок посетителей
+            в тот же день недели и час. Фактическая очередь может отличаться.
+        </p>
+
+        <aside class="medical-notice" aria-label="Важная информация">
+            <strong>Только для плановых посещений.</strong>
+            При необходимости срочной медицинской помощи не откладывайте
+            обращение ради меньшей очереди.
+            Время уже назначенного приёма согласовывайте с учреждением.
+        </aside>
+
+        <form method="get" class="forecast-form">
+            {{ form.as_p }}
+
+            <p id="cabinet-hint" class="forecast-note" aria-live="polite">
+                Без выбора кабинета анализируется общая очередь.
+            </p>
+
+            <button type="submit" class="btn btn-primary">
+                Рассчитать прогноз
+            </button>
+        </form>
+
+        {% if forecast %}
+            <section class="forecast-result" aria-labelledby="forecast-result-title">
+                <h2 id="forecast-result-title">Результат</h2>
+
+                <p>
+                    <strong>{{ institution.name }}</strong><br>
+                    {% if cabinet %}
+                        {{ cabinet.name }}
+                    {% else %}
+                        Общая очередь без указания кабинета
+                    {% endif %}
+                    · {{ visit_date|date:"d.m.Y" }}
+                </p>
+
+                {% if forecast.error %}
+                    <p class="forecast-notice">{{ forecast.error }}</p>
+                {% else %}
+                    {% if forecast.best_slot %}
+                        <div class="forecast-recommendation">
+                            <strong>
+                                Рекомендуемый интервал:
+                                {{ forecast.best_slot.start }}–{{ forecast.best_slot.end }}
+                            </strong>
+                            <p>{{ forecast.best_slot.label }}.</p>
+                            <p>
+                                Учтено оценок: {{ forecast.best_slot.reports_count }},
+                                исторических дней: {{ forecast.best_slot.days_count }}.
+                            </p>
+                        </div>
+                        <p class="forecast-note">
+                            Выбран наименее загруженный интервал среди тех,
+                            для которых достаточно данных.
+                        </p>
+                    {% else %}
+                        <p class="forecast-notice">
+                            {% if forecast.slots %}
+                                Недостаточно данных для рекомендации.
+                                Неизвестная загруженность не означает отсутствие очереди.
+                            {% else %}
+                                На выбранную дату нет доступных полных часовых
+                                интервалов в указанном графике.
+                            {% endif %}
+                        </p>
+                    {% endif %}
+
+                    {% if forecast.slots %}
+                        <div class="forecast-table-wrapper" tabindex="0" role="region"
+                             aria-label="Прогноз по часам">
+                            <table class="forecast-table">
+                                <caption>Историческая загруженность по часам</caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Время</th>
+                                        <th scope="col">Загруженность</th>
+                                        <th scope="col">Оценок / дней</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for slot in forecast.slots %}
+                                        <tr>
+                                            <td>{{ slot.start }}–{{ slot.end }}</td>
+                                            <td>{{ slot.label }}</td>
+                                            <td>{{ slot.reports_count }} / {{ slot.days_count }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                <p class="forecast-note">
+                    График в базе: {{ institution.working_hours }}.
+                    Уточните часы работы, выходные и праздничные дни
+                    непосредственно у учреждения.
+                </p>
+            </section>
+        {% endif %}
     </section>
+
+    {{ cabinets_data|json_script:"cabinets-data" }}
+    <script src="{% static 'js/rate.js' %}" defer></script>
 {% endblock %}

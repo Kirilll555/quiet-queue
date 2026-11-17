@@ -1,0 +1,124 @@
+.forecast-section {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.forecast-section h1,
+.forecast-section h2 {
+    color: #17324d;
+}
+
+.forecast-intro,
+.forecast-note {
+    color: #52606d;
+    line-height: 1.6;
+}
+
+.medical-notice {
+    margin: 24px 0;
+    padding: 18px;
+    border-left: 4px solid #b54708;
+    border-radius: 8px;
+    background: #fff7e3;
+    color: #59400b;
+    line-height: 1.6;
+}
+
+.forecast-form,
+.forecast-result {
+    margin-top: 24px;
+    padding: clamp(18px, 4vw, 32px);
+    border: 1px solid #dfe5eb;
+    border-radius: 16px;
+    background: #ffffff;
+}
+
+.forecast-form > p {
+    display: grid;
+    gap: 8px;
+    margin: 0 0 20px;
+}
+
+.forecast-form label {
+    font-weight: 700;
+}
+
+.forecast-form select,
+.forecast-form input {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding: 11px 12px;
+    border: 1px solid #b8c4ce;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #1d2939;
+    font: inherit;
+}
+
+.forecast-form select:disabled {
+    background: #f2f4f7;
+    color: #667085;
+}
+
+.forecast-form select:focus-visible,
+.forecast-form input:focus-visible {
+    outline: 3px solid #f2a900;
+    outline-offset: 2px;
+}
+
+.forecast-form .errorlist {
+    color: #9b2c23;
+}
+
+.forecast-recommendation,
+.forecast-notice {
+    padding: 18px;
+    border-radius: 10px;
+    line-height: 1.6;
+}
+
+.forecast-recommendation {
+    background: #e8f5ec;
+    color: #17643a;
+}
+
+.forecast-notice {
+    background: #f2f4f7;
+    color: #475467;
+}
+
+.forecast-table-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.forecast-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.forecast-table caption {
+    padding: 16px 0;
+    text-align: left;
+    font-weight: 700;
+}
+
+.forecast-table th,
+.forecast-table td {
+    padding: 12px;
+    border-bottom: 1px solid #dfe5eb;
+    text-align: left;
+    vertical-align: top;
+}
+
+.forecast-table th {
+    background: #f8fafc;
+}
+
+@media (max-width: 600px) {
+    .forecast-form .btn {
+        width: 100%;
+    }
+}

@@ -10,7 +10,8 @@ from django.db import OperationalError
 
 from .services import submit_queue_report, REPORT_COOLDOWN_MINUTES
 from .models import Cabinet, Institution, QueueReport, InstitutionRequest
-from .forms import SignUpForm
+from .forms import SignUpForm, ForecastForm
+from .services import build_visit_forecast
 
 
 def index(request):
@@ -258,8 +259,38 @@ def suggest_institution(request):
 
 
 def ai_prediction(request):
-    ai_response = "ИИ проанализировал данные. Лучшее время для визита — завтра с утра."
-    return render(request, 'pages/prediction.html', {'ai_text': ai_response})
+    submitted = bool(request.GET)
+    form = ForecastForm(request.GET if submitted else None)
+    forecast = None
+    institution = None
+    cabinet = None
+    visit_date = None
+
+    if submitted and form.is_valid():
+        institution = form.cleaned_data["institution_id"]
+        cabinet = form.cleaned_data["cabinet_id"]
+        visit_date = form.cleaned_data["visit_date"]
+
+        forecast = build_visit_forecast(
+            institution=institution,
+            cabinet=cabinet,
+            visit_date=visit_date,
+        )
+
+    cabinets_data = list(
+        Cabinet.objects.order_by("name").values(
+            "id", "name", "cabinet_type", "institution_id"
+        )
+    )
+
+    return render(request, "pages/prediction.html", {
+        "form": form,
+        "forecast": forecast,
+        "institution": institution,
+        "cabinet": cabinet,
+        "visit_date": visit_date,
+        "cabinets_data": cabinets_data,
+    })
 
 def register(request):
     if request.user.is_authenticated:

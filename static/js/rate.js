@@ -26,7 +26,7 @@ function updateCabinets(selectedCabinetId = "") {
     cabinetSelect.add(new Option("Без указания кабинета", ""));
 
     if (matchingCabinets.length === 0) {
-        cabinetHint.textContent = "Кабинеты пока не добавлены. Отметка будет сохранена для учреждения.";
+        cabinetHint.textContent = "Кабинеты пока не добавлены. Доступна только общая очередь учреждения.";
         return;
     }
 
@@ -41,7 +41,7 @@ function updateCabinets(selectedCabinetId = "") {
     }
 
     cabinetSelect.disabled = false;
-    cabinetHint.textContent = "Выберите кабинет или оставьте отметку без его указания.";
+    cabinetHint.textContent = "Выберите кабинет или оставьте поле пустым для общей очереди.";
 }
 
 institutionSelect.addEventListener("change", () => {

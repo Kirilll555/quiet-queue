@@ -7,7 +7,7 @@
             <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Главная</a></li>
             <li class="nav-item"><a href="{% url 'suggest' %}" class="nav-link">Предложить</a></li>
             <li class="nav-item"><a href="{% url 'rate' %}" class="nav-link">Оценить</a></li>
-            <li class="nav-item"><a href="{% url 'ai_prediction' %}" class="nav-link">Прогноз ИИ</a></li>
+            <li class="nav-item"><a href="{% url 'ai_prediction' %}" class="nav-link">Прогноз загруженности</a></li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
                     <span class="nav-username">{{ user.username }}</span>
