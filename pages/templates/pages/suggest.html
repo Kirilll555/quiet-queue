@@ -10,23 +10,45 @@
 {% block content %}
     <section class="form-section">
         <h1 class="section-title">Предложить учреждение</h1>
-        <p class="form-description">Заполните форму, и мы добавим его на сайт после проверки модератором.</p>
+        <p class="form-description">
+            Не нашли учреждение в каталоге? Отправьте предложение.
+            После проверки модератор сможет добавить его на сайт.
+        </p>
         <form method="post" class="suggest-form">
             {% csrf_token %}
 
             <div class="form-group">
                 <label class="form-label" for="name">Название учреждения:</label>
-                <input type="text" id="name" name="name" class="form-input" placeholder="Например: Поликлиника №5" required>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    class="form-input"
+                    placeholder="Например: Поликлиника №5"
+                    value="{{ request.POST.name }}"
+                    maxlength="255"
+                    required
+                >
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="category">Тип учреждения:</label>
                 <select id="category" name="category" class="form-select" required>
-                    <option value="" disabled selected>Выберите тип</option>
-                    <option value="Поликлиника">Поликлиника</option>
-                    <option value="МФЦ">МФЦ</option>
-                    <option value="Почта">Почта</option>
-                    <option value="Другое">Другое</option>
+                    <option value="" disabled {% if not request.POST.category %}selected{% endif %}>
+                        Выберите тип
+                    </option>
+                    <option value="Поликлиника" {% if request.POST.category == "Поликлиника" %}selected{% endif %}>
+                        Поликлиника
+                    </option>
+                    <option value="МФЦ" {% if request.POST.category == "МФЦ" %}selected{% endif %}>
+                        МФЦ
+                    </option>
+                    <option value="Почта" {% if request.POST.category == "Почта" %}selected{% endif %}>
+                        Почта
+                    </option>
+                    <option value="Другое" {% if request.POST.category == "Другое" %}selected{% endif %}>
+                        Другое
+                    </option>
                 </select>
             </div>
 
