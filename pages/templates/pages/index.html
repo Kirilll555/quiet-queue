@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'css/index_styles.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'css/index_styles.css' %}?v=2">
 {% endblock %}
 
 {% block title %}Главная — Тихая очередь{% endblock %}
@@ -63,7 +63,39 @@
             <a href="{% url 'index' %}#institutions" class="btn btn-secondary">Сбросить</a>
         </form>
 
-        <div class="institution-grid">
+        <div class="catalog-view-switch" role="group" aria-label="Представление каталога">
+            <button
+                type="button"
+                id="show-list"
+                class="btn btn-primary"
+                aria-pressed="true"
+                aria-controls="institution-list"
+            >
+                Список
+            </button>
+            <button
+                type="button"
+                id="show-map"
+                class="btn btn-secondary"
+                aria-pressed="false"
+                aria-controls="institution-map-panel"
+                disabled
+            >
+                Карта
+            </button>
+        </div>
+
+        <div id="institution-map-panel" hidden>
+            <p id="map-message" role="status"></p>
+            <div id="institution-map" aria-label="Карта учреждений"></div>
+            <p class="map-note">
+                Показаны учреждения с заполненными координатами.
+                Демоучреждения обозначают условные места.
+                Статус в маркере относится к общей очереди без кабинета.
+            </p>
+        </div>
+
+        <div class="institution-grid" id="institution-list">
             {% for institution in institutions %}
                 <article class="institution-card">
                     <div class="institution-card-top">
@@ -149,4 +181,11 @@
             {% endfor %}
         </div>
     </section>
+    {{ map_institutions|json_script:"map-institutions-data" }}
+
+    {% if yandex_maps_api_key %}
+        <script src="https://api-maps.yandex.ru/2.1/?apikey={{ yandex_maps_api_key|urlencode }}&amp;lang=ru_RU" defer></script>
+    {% endif %}
+
+    <script src="{% static 'js/catalog-map.js' %}" defer></script>
 {% endblock %}

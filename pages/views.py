@@ -4,6 +4,7 @@ from django.urls import reverse
 from datetime import timedelta
 from django.utils import timezone
 from django.db.models import Prefetch
+from django.conf import settings
 
 from .models import Cabinet, Institution, QueueReport, InstitutionRequest
 
@@ -73,10 +74,29 @@ def index(request):
                 reports_by_cabinet.get(cabinet.id, []),
             )
 
+    map_institutions = [
+        {
+            "id": institution.id,
+            "name": institution.name,
+            "address": institution.address,
+            "latitude": float(institution.latitude),
+            "longitude": float(institution.longitude),
+            "queue_label": institution.queue_label,
+            "rate_url": (
+                f"{reverse('rate')}?institution_id={institution.id}"
+            ),
+        }
+        for institution in institutions
+        if institution.latitude is not None
+        and institution.longitude is not None
+    ]
+
     return render(request, "pages/index.html", {
         "institutions": institutions,
         "query": query,
         "category": category,
+        "map_institutions": map_institutions,
+        "yandex_maps_api_key": settings.YANDEX_MAPS_API_KEY,
     })
 
 

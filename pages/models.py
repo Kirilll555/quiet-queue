@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Institution(models.Model):
@@ -6,7 +7,28 @@ class Institution(models.Model):
     category = models.CharField("Тип", max_length=100)
     address = models.CharField("Адрес", max_length=255, default="г. Махачкала")
     working_hours = models.CharField("Часы работы", max_length=100, default="08:00 - 18:00")
-
+    latitude = models.DecimalField(
+        "Широта",
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True,
+        validators=[
+            MinValueValidator(-90),
+            MaxValueValidator(90),
+        ],
+    )
+    longitude = models.DecimalField(
+        "Долгота",
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True,
+        validators=[
+            MinValueValidator(-180),
+            MaxValueValidator(180),
+        ],
+    )
     def __str__(self):
         return self.name
 

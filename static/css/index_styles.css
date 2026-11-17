@@ -325,3 +325,35 @@
     font-size: 0.9rem;
     line-height: 1.5;
 }
+
+.catalog-view-switch {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+#institution-list[hidden],
+#institution-map-panel[hidden],
+#institution-map[hidden] {
+    display: none;
+}
+
+#institution-map {
+    height: clamp(320px, 60vh, 560px);
+    width: 100%;
+    border: 1px solid #dfe5eb;
+    border-radius: 16px;
+    z-index: 0;
+}
+
+.map-note,
+#map-message {
+    color: #52606d;
+    line-height: 1.5;
+}
+
+.catalog-view-switch .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
