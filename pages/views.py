@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from datetime import timedelta
 from django.utils import timezone
+from django.db.models import Prefetch
 
 from .models import Cabinet, Institution, QueueReport, InstitutionRequest
 
@@ -10,8 +11,13 @@ from .models import Cabinet, Institution, QueueReport, InstitutionRequest
 def index(request):
     query = request.GET.get("q", "").strip()
     category = request.GET.get("category", "").strip()
+    one_hour_ago = timezone.now() - timedelta(hours=1)
 
-    institutions = Institution.objects.all()
+    recent_reports = QueueReport.objects.filter(
+        created_at__gte=one_hour_ago
+    ).order_by("-created_at", "-id")
+
+    institutions = Institution.objects.order_by("name")
 
     if query:
         institutions = institutions.filter(name__icontains=query)
@@ -19,22 +25,53 @@ def index(request):
     if category:
         institutions = institutions.filter(category=category)
 
-    one_hour_ago = timezone.now() - timedelta(hours=1)
+    institutions = institutions.prefetch_related(
+        Prefetch(
+            "reports",
+            queryset=recent_reports,
+            to_attr="recent_reports",
+        ),
+        Prefetch(
+            "cabinets",
+            queryset=Cabinet.objects.order_by("name"),
+            to_attr="queue_cabinets",
+        ),
+    )
 
-    for inst in institutions:
-        reports = inst.reports.filter(created_at__gte=one_hour_ago)
-        latest_report = reports.first()
+    def set_queue_status(target, reports):
+        target.reports_count = len(reports)
 
-        inst.reports_count = reports.count()
-
-        if latest_report:
-            inst.queue_level = latest_report.queue_level
-            inst.queue_label = latest_report.get_queue_level_display()
-            inst.updated_label = timezone.localtime(latest_report.created_at).strftime("%H:%M")
+        if reports:
+            latest_report = reports[0]
+            target.queue_level = latest_report.queue_level
+            target.queue_label = latest_report.get_queue_level_display()
+            target.updated_label = timezone.localtime(
+                latest_report.created_at
+            ).strftime("%H:%M")
         else:
-            inst.queue_level = "unknown"
-            inst.queue_label = "Нет свежих отметок"
-            inst.updated_label = "Нет отметок за последний час"
+            target.queue_level = "unknown"
+            target.queue_label = "Нет свежих отметок"
+            target.updated_label = "Нет отметок за последний час"
+
+    for institution in institutions:
+        general_reports = []
+        reports_by_cabinet = {}
+
+        for report in institution.recent_reports:
+            if report.cabinet_id is None:
+                general_reports.append(report)
+            else:
+                reports_by_cabinet.setdefault(
+                    report.cabinet_id, []
+                ).append(report)
+
+        set_queue_status(institution, general_reports)
+
+        for cabinet in institution.queue_cabinets:
+            set_queue_status(
+                cabinet,
+                reports_by_cabinet.get(cabinet.id, []),
+            )
 
     return render(request, "pages/index.html", {
         "institutions": institutions,

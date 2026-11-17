@@ -289,3 +289,39 @@
         width: 100%;
     }
 }
+
+.institution-cabinets summary {
+    padding: 8px 0;
+    color: #164e63;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.cabinet-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.cabinet-item {
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+    min-width: 0;
+    padding: 14px;
+    border: 1px solid #dfe5eb;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.cabinet-item > span {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.general-queue-label {
+    margin: 0 0 12px;
+    color: #52606d;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}

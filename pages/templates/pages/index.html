@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/index_styles.css' %}">
+        <link rel="stylesheet" href="{% static 'css/index_styles.css' %}?v=2">
 {% endblock %}
 
 {% block title %}Главная — Тихая очередь{% endblock %}
@@ -82,14 +82,41 @@
                     <p class="institution-address">📍 {{ institution.address }}</p>
                     <p class="institution-hours">🕒 {{ institution.working_hours }}</p>
 
-                    <div class="institution-cabinets">
-                        Кабинеты:
-                        {% for cabinet in institution.cabinets.all %}
-                            {{ cabinet.name }}{% if not forloop.last %}, {% endif %}
-                        {% empty %}
-                            Нет данных
-                        {% endfor %}
-                    </div>
+                    <details class="institution-cabinets">
+                        <summary>Очереди по кабинетам</summary>
+
+                        <div class="cabinet-list">
+                            {% for cabinet in institution.queue_cabinets %}
+                                <div class="cabinet-item">
+                                    <strong>{{ cabinet.name }}</strong>
+
+                                    {% if cabinet.cabinet_type %}
+                                        <span>{{ cabinet.cabinet_type }}</span>
+                                    {% endif %}
+
+                                    <span class="status-pill status-pill--{{ cabinet.queue_level }}">
+                                        <span class="status-dot" aria-hidden="true"></span>
+                                        {{ cabinet.queue_label }}
+                                    </span>
+
+                                    <span>
+                                        {% if cabinet.reports_count %}
+                                            Последняя отметка: {{ cabinet.updated_label }}.
+                                            Отметок за час: {{ cabinet.reports_count }}.
+                                        {% else %}
+                                            {{ cabinet.updated_label }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            {% empty %}
+                                <p>Кабинеты пока не добавлены.</p>
+                            {% endfor %}
+                        </div>
+                    </details>
+
+                    <p class="general-queue-label">
+                        Общая очередь — отметки без указания кабинета
+                    </p>
 
                     <div class="institution-card-details">
                         <p>
