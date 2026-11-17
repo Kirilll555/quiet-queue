@@ -5,7 +5,10 @@ from datetime import timedelta
 from django.utils import timezone
 from django.db.models import Prefetch
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.db import OperationalError
 
+from .services import submit_queue_report, REPORT_COOLDOWN_MINUTES
 from .models import Cabinet, Institution, QueueReport, InstitutionRequest
 from .forms import SignUpForm
 
@@ -16,7 +19,8 @@ def index(request):
     one_hour_ago = timezone.now() - timedelta(hours=1)
 
     recent_reports = QueueReport.objects.filter(
-        created_at__gte=one_hour_ago
+        created_at__gte=one_hour_ago,
+        user__isnull=False,
     ).order_by("-created_at", "-id")
 
     institutions = Institution.objects.order_by("name")
@@ -41,19 +45,46 @@ def index(request):
     )
 
     def set_queue_status(target, reports):
-        target.reports_count = len(reports)
+        latest_by_user = {}
 
-        if reports:
-            latest_report = reports[0]
-            target.queue_level = latest_report.queue_level
-            target.queue_label = latest_report.get_queue_level_display()
-            target.updated_label = timezone.localtime(
-                latest_report.created_at
-            ).strftime("%H:%M")
-        else:
+        for report in reports:
+            if report.user_id not in latest_by_user:
+                latest_by_user[report.user_id] = report
+
+        unique_reports = list(latest_by_user.values())
+        target.reports_count = len(unique_reports)
+        target.average_score = None
+
+        if not unique_reports:
             target.queue_level = "unknown"
             target.queue_label = "Нет свежих отметок"
             target.updated_label = "Нет отметок за последний час"
+            return
+
+        scores = {
+            "low": 1,
+            "medium": 2,
+            "high": 3,
+        }
+        average = sum(
+            scores[report.queue_level] for report in unique_reports
+        ) / len(unique_reports)
+
+        target.average_score = round(average, 2)
+
+        if average < 1.5:
+            target.queue_level = "low"
+            target.queue_label = "Небольшая очередь"
+        elif average < 2.5:
+            target.queue_level = "medium"
+            target.queue_label = "Умеренная очередь"
+        else:
+            target.queue_level = "high"
+            target.queue_label = "Много людей"
+
+        target.updated_label = timezone.localtime(
+            unique_reports[0].created_at
+        ).strftime("%H:%M")
 
     for institution in institutions:
         general_reports = []
@@ -101,6 +132,7 @@ def index(request):
     })
 
 
+@login_required
 def rate_queue(request):
     institutions = Institution.objects.order_by("name")
     cabinets_data = list(
@@ -158,11 +190,34 @@ def rate_queue(request):
         if error:
             messages.error(request, error)
         else:
-            QueueReport.objects.create(
-                institution=institution,
-                cabinet=cabinet,
-                queue_level=queue_level,
-            )
+            try:
+                saved = submit_queue_report(
+                    user=request.user,
+                    institution=institution,
+                    cabinet=cabinet,
+                    queue_level=queue_level,
+                )
+            except OperationalError as exc:
+                if "locked" not in str(exc).lower():
+                    raise
+
+                messages.error(
+                    request,
+                    "База данных занята. Повторите отправку через несколько секунд.",
+                )
+                return redirect(
+                    f"{reverse('rate')}?institution_id={institution.id}"
+                )
+
+            if not saved:
+                messages.warning(
+                    request,
+                    "Вы уже оценили эту очередь. Повторная отметка доступна "
+                    f"через {REPORT_COOLDOWN_MINUTES} минут после предыдущей.",
+                )
+                return redirect(
+                    f"{reverse('rate')}?institution_id={institution.id}"
+                )
 
             location = institution.name
             if cabinet is not None:

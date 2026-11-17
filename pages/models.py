@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.conf import settings
 
 
 class Institution(models.Model):
@@ -48,7 +49,14 @@ class QueueReport(models.Model):
         ("medium", "Умеренная очередь"),
         ("high", "Много людей"),
     ]
-
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="queue_reports",
+        verbose_name="Пользователь",
+    )
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name="reports")
     cabinet = models.ForeignKey(Cabinet, on_delete=models.SET_NULL, null=True, blank=True, related_name="reports")
     queue_level = models.CharField(max_length=6, choices=QUEUE_LEVEL_CHOICES)
@@ -74,3 +82,23 @@ class InstitutionRequest(models.Model):
 
     def __str__(self):
         return f"Заявка: {self.name}"
+
+class ReportCooldown(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    institution = models.ForeignKey(
+        Institution,
+        on_delete=models.CASCADE,
+    )
+    queue_key = models.CharField(max_length=40)
+    next_allowed_at = models.DateTimeField()
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "institution", "queue_key"],
+                name="unique_report_cooldown",
+            ),
+        ]

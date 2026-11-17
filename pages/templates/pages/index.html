@@ -134,7 +134,7 @@
                                     <span>
                                         {% if cabinet.reports_count %}
                                             Последняя отметка: {{ cabinet.updated_label }}.
-                                            Отметок за час: {{ cabinet.reports_count }}.
+                                            Учтено аккаунтов за час: {{ cabinet.reports_count }}.
                                         {% else %}
                                             {{ cabinet.updated_label }}
                                         {% endif %}
@@ -147,7 +147,9 @@
                     </details>
 
                     <p class="general-queue-label">
-                        Общая очередь — отметки без указания кабинета
+                        Общая очередь — без указания кабинета.
+                        Статусы рассчитаны по среднему из последних оценок
+                        каждого аккаунта за 60 минут.
                     </p>
 
                     <div class="institution-card-details">
@@ -162,7 +164,7 @@
                             <strong>{{ institution.updated_label }}</strong>
                         </p>
                         <p>
-                            <span>Отметок за час</span>
+                            <span>Учтено аккаунтов за час</span>
                             <strong>{{ institution.reports_count }}</strong>
                         </p>
                     </div>
