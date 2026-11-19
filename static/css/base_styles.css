@@ -1,12 +1,23 @@
-/* Общие правила: ширина элементов включает внутренние отступы и рамки */
-* {
-    box-sizing: border-box;
+/* Общая палитра проекта */
+:root {
+    --color-primary: #4f46e5;
+    --color-primary-hover: #4338ca;
+    --color-primary-soft: #ede9fe;
+    --color-accent: #a78bfa;
+    --color-background: #f7f6fd;
+    --color-surface: #ffffff;
+    --color-text: #1f2937;
+    --color-muted: #52606d;
+    --color-border: #dddde9;
+    --color-focus: #b45309;
+
+    font-family: Arial, sans-serif;
+    color: var(--color-text);
+    background: var(--color-background);
 }
 
-:root {
-    font-family: Arial, sans-serif;
-    color: #1d2939;
-    background: #f4f7fa;
+* {
+    box-sizing: border-box;
 }
 
 body {
@@ -15,148 +26,202 @@ body {
     min-width: 320px;
     min-height: 100vh;
     margin: 0;
+    line-height: 1.5;
 }
 
 a {
     color: inherit;
 }
 
-/* Шапка сайта */
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+/* Шапка */
 .site-header {
-    background: #ffffff;
-    border-bottom: 1px solid #dfe5eb;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
 }
 
 .main-nav {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
-    width: min(1200px, calc(100% - 40px));
+    gap: 16px 24px;
+    width: min(1400px, calc(100% - 48px));
     margin: 0 auto;
-    padding: 18px 0;
+    padding: 16px 0;
+}
+
+.nav-brand {
+    min-width: 0;
 }
 
 .logo-link {
-    color: #164e63;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    color: var(--color-text);
     font-size: 1.25rem;
     font-weight: 700;
     text-decoration: none;
 }
 
-/* Ссылки навигации */
+.logo-symbol {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+    font-size: 1.1rem;
+}
+
 .nav-menu {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
-.nav-link,
-.btn-login {
+.nav-menu[hidden],
+.nav-toggle[hidden] {
+    display: none;
+}
+
+.nav-link {
     display: inline-flex;
     align-items: center;
     min-height: 44px;
-    padding: 10px 14px;
+    padding: 10px 12px;
     border-radius: 8px;
+    color: var(--color-muted);
+    font-weight: 600;
     text-decoration: none;
 }
 
 .nav-link:hover {
-    background: #edf4f5;
+    background: var(--color-primary-soft);
+    color: var(--color-primary-hover);
 }
 
-.btn-login {
-    background: #086b63;
-    color: #ffffff;
-    font-weight: 700;
+.nav-link[aria-current="page"] {
+    background: var(--color-primary-soft);
+    color: var(--color-primary-hover);
 }
 
-/* Видимая рамка помогает понять, на какой ссылке или кнопке фокус */
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-select:focus-visible {
-    outline: 3px solid #f2a900;
-    outline-offset: 3px;
+.nav-username {
+    display: inline-block;
+    max-width: 160px;
+    padding: 8px;
+    overflow-wrap: anywhere;
+    color: var(--color-muted);
+    font-size: 0.9rem;
 }
 
-/* Основная область растягивается, чтобы подвал оставался внизу */
-.main-content {
-    flex: 1;
-    width: min(1200px, calc(100% - 40px));
-    margin: 40px auto;
+.logout-form {
+    margin: 0;
 }
 
-/* Общие кнопки для страниц сайта */
-.btn {
+/* Кнопки */
+.btn,
+.nav-toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
     min-height: 46px;
     padding: 11px 18px;
     border: 1px solid transparent;
-    border-radius: 8px;
+    border-radius: 10px;
     font: inherit;
     font-weight: 700;
+    text-align: center;
     text-decoration: none;
     cursor: pointer;
 }
 
 .btn-primary {
-    background: #086b63;
+    background: var(--color-primary);
     color: #ffffff;
 }
 
-.btn-secondary {
-    border-color: #b8ccca;
-    background: #ffffff;
-    color: #164e63;
+.btn-primary:hover {
+    background: var(--color-primary-hover);
+}
+
+.btn-secondary,
+.btn-login,
+.nav-toggle {
+    border-color: var(--color-primary);
+    background: var(--color-surface);
+    color: var(--color-primary-hover);
+}
+
+.btn-secondary:hover,
+.btn-login:hover,
+.nav-toggle:hover {
+    background: var(--color-primary-soft);
+}
+
+button:disabled {
+    cursor: not-allowed;
+}
+
+/* Управление с клавиатуры */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
+}
+
+/* Основное содержимое */
+.main-content {
+    flex: 1;
+    width: min(1400px, calc(100% - 48px));
+    margin: 32px auto;
 }
 
 .site-footer {
-    padding: 20px;
-    border-top: 1px solid #dfe5eb;
-    background: #ffffff;
-    color: #52606d;
+    padding: 20px 24px;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-muted);
+    font-size: 0.9rem;
     text-align: center;
 }
 
-/* На узком экране шапка перестраивается в несколько строк */
-@media (max-width: 700px) {
-    .main-nav {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .nav-menu {
-        gap: 4px;
-    }
-
-    .nav-link,
-    .btn-login {
-        padding: 9px 10px;
-    }
-
-    .main-content {
-        margin-top: 28px;
-        margin-bottom: 28px;
-    }
+.site-footer p {
+    margin: 0;
 }
+
+/* Сообщения */
 .flash-messages {
-    width: min(760px, 100%);
-    margin: 0 auto 20px;
+    width: min(900px, 100%);
+    margin: 0 auto 24px;
 }
 
 .flash-message {
-    margin: 0;
+    margin: 0 0 12px;
     padding: 14px 16px;
     border: 1px solid;
-    border-radius: 8px;
+    border-radius: 10px;
     line-height: 1.5;
 }
 
@@ -172,13 +237,67 @@ select:focus-visible {
     color: #9b2c23;
 }
 
-.logout-form {
-    margin: 0;
+.flash-message--warning {
+    border-color: #e7cb87;
+    background: #fff4d6;
+    color: #765000;
 }
 
-.nav-username {
-    display: inline-block;
-    max-width: 160px;
-    overflow-wrap: anywhere;
-    color: #52606d;
+.flash-message--info {
+    border-color: #c4b5fd;
+    background: var(--color-primary-soft);
+    color: #3730a3;
+}
+
+/* Меню на телефонах и небольших планшетах */
+@media (max-width: 1000px) {
+    .main-nav {
+        gap: 12px;
+    }
+
+    .nav-menu {
+        width: 100%;
+        align-items: stretch;
+        flex-direction: column;
+        padding-top: 12px;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .nav-link {
+        width: 100%;
+    }
+
+    .nav-menu .btn {
+        width: 100%;
+    }
+
+    .nav-username {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .main-nav,
+    .main-content {
+        width: calc(100% - 32px);
+    }
+
+    .main-content {
+        margin-top: 24px;
+        margin-bottom: 24px;
+    }
+
+    .logo-link {
+        gap: 8px;
+        font-size: 1.05rem;
+    }
+
+    .logo-symbol {
+        width: 30px;
+        height: 30px;
+    }
+
+    .nav-toggle {
+        padding: 10px 12px;
+    }
 }

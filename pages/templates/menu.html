@@ -1,28 +1,75 @@
 <header class="site-header">
-    <nav class="main-nav">
+    <nav class="main-nav" aria-label="Основная навигация">
         <div class="nav-brand">
-            <a href="{% url 'index' %}" class="logo-link">Тихая очередь</a>
+            <a href="{% url 'index' %}" class="logo-link">
+                <span class="logo-symbol" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path fill="#4F46E5" d="M12 1a8 8 0 0 0-8 8c0 5.4 8 14 8 14s8-8.6 8-14a8 8 0 0 0-8-8Z"/>
+                        <circle cx="12" cy="9" r="5" fill="#fff"/>
+                        <path d="M12 6.3V9l2 1.4" fill="none" stroke="#4F46E5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <span>Тихая очередь</span>
+            </a>
         </div>
-        <ul class="nav-menu">
-            <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Главная</a></li>
-            <li class="nav-item"><a href="{% url 'suggest' %}" class="nav-link">Предложить</a></li>
-            <li class="nav-item"><a href="{% url 'rate' %}" class="nav-link">Оценить</a></li>
-            <li class="nav-item"><a href="{% url 'ai_prediction' %}" class="nav-link">Прогноз загруженности</a></li>
-            {% if user.is_authenticated %}
+
+        <button
+            type="button"
+            class="nav-toggle"
+            id="nav-toggle"
+            aria-controls="nav-menu"
+            aria-expanded="false"
+            hidden
+        >
+            <span aria-hidden="true">☰</span>
+            Меню
+        </button>
+
+        {% with current=request.resolver_match.url_name %}
+            <ul class="nav-menu" id="nav-menu">
                 <li class="nav-item">
-                    <span class="nav-username">{{ user.username }}</span>
+                    <a href="{% url 'index' %}" class="nav-link"
+                       {% if current == 'index' %}aria-current="page"{% endif %}>
+                        Каталог
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <form method="post" action="{% url 'logout' %}" class="logout-form">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-login">Выйти</button>
-                    </form>
+                    <a href="{% url 'suggest' %}" class="nav-link"
+                       {% if current == 'suggest' %}aria-current="page"{% endif %}>
+                        Предложить
+                    </a>
                 </li>
-            {% else %}
                 <li class="nav-item">
-                    <a href="{% url 'login' %}" class="btn btn-login">Войти</a>
+                    <a href="{% url 'rate' %}" class="nav-link"
+                       {% if current == 'rate' %}aria-current="page"{% endif %}>
+                        Оценить
+                    </a>
                 </li>
-            {% endif %}
-        </ul>
+                <li class="nav-item">
+                    <a href="{% url 'ai_prediction' %}" class="nav-link"
+                       {% if current == 'ai_prediction' %}aria-current="page"{% endif %}>
+                        Прогноз
+                    </a>
+                </li>
+
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="nav-username">{{ user.username }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}" class="logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-login">Выйти</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a href="{% url 'login' %}" class="btn btn-login">
+                            Войти
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endwith %}
     </nav>
 </header>

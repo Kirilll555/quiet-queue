@@ -12,6 +12,7 @@
     );
 
     let map = null;
+    const desktopScreen = window.matchMedia("(min-width: 1001px)");
 
     function escapeHtml(value) {
         const element = document.createElement("div");
@@ -71,7 +72,7 @@
     }
 
     function showView(showMap) {
-        listPanel.hidden = showMap;
+        listPanel.hidden = showMap && !desktopScreen.matches;
         mapPanel.hidden = !showMap;
 
         listButton.setAttribute("aria-pressed", String(!showMap));
@@ -118,6 +119,10 @@
     ymaps.ready(
         () => {
             mapButton.disabled = false;
+            desktopScreen.addEventListener("change", () => {
+                showView(desktopScreen.matches);
+            });
+            showView(desktopScreen.matches);
         },
         () => {
             mapButton.textContent = "Карта недоступна";

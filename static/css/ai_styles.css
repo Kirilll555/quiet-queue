@@ -79,8 +79,16 @@
 }
 
 .forecast-recommendation {
-    background: #e8f5ec;
-    color: #17643a;
+    background: #ede9fe;
+    color: #3730a3;
+}
+
+.forecast-recommendation > strong {
+    font-size: 1.15rem;
+}
+
+.forecast-recommendation > p {
+    margin: 6px 0 0;
 }
 
 .forecast-notice {
@@ -114,7 +122,12 @@
 }
 
 .forecast-table th {
-    background: #f8fafc;
+    background: #ede9fe;
+    color: #312e81;
+}
+
+.forecast-table tbody tr:nth-child(even) {
+    background: #f7f5ff;
 }
 
 @media (max-width: 600px) {

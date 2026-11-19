@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/index_styles.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'css/index_styles.css' %}?v=layout-1">
 {% endblock %}
 
 {% block title %}Главная — Тихая очередь{% endblock %}
@@ -85,6 +85,8 @@
             </button>
         </div>
 
+        <div class="catalog-layout">
+
         <div id="institution-map-panel" hidden>
             <p id="map-message" role="status"></p>
             <div id="institution-map" aria-label="Карта учреждений"></div>
@@ -102,11 +104,13 @@
                         <span class="institution-category">
                             {{ institution.category }}
                         </span>
-
-                        <span class="status-pill status-pill--{{ institution.queue_level }}">
-                            <span class="status-dot" aria-hidden="true"></span>
-                            {{ institution.queue_label }}
-                        </span>
+                        <div class="institution-queue">
+                            <span>Общая очередь:</span>
+                            <span class="status-pill status-pill--{{ institution.queue_level }}">
+                                <span class="status-dot" aria-hidden="true"></span>
+                                {{ institution.queue_label }}
+                            </span>
+                        </div>
                     </div>
 
                     <h3 class="institution-name">{{ institution.name }}</h3>
@@ -146,41 +150,36 @@
                         </div>
                     </details>
 
-                    <p class="general-queue-label">
-                        Общая очередь — без указания кабинета.
-                        Статусы рассчитаны по среднему из последних оценок
-                        каждого аккаунта за 60 минут.
-                    </p>
+                    {% if institution.reports_count %}
+                        <div class="institution-card-details">
+                            <p>
+                                <span>Последняя отметка</span>
+                                <strong>{{ institution.updated_label }}</strong>
+                            </p>
+                            <p>
+                                <span>Учтено аккаунтов за час</span>
+                                <strong>{{ institution.reports_count }}</strong>
+                            </p>
+                        </div>
+                    {% endif %}
 
-                    <div class="institution-card-details">
-                        <p>
-                            <span>
-                                {% if institution.reports_count %}
-                                    Последняя отметка
-                                {% else %}
-                                    Свежесть данных
-                                {% endif %}
-                            </span>
-                            <strong>{{ institution.updated_label }}</strong>
-                        </p>
-                        <p>
-                            <span>Учтено аккаунтов за час</span>
-                            <strong>{{ institution.reports_count }}</strong>
-                        </p>
+                    <div class="institution-actions">
+                        <a href="{% url 'rate' %}?institution_id={{ institution.id }}"
+                           class="btn btn-primary">
+                            Оценить очередь
+                        </a>
+                        <a href="{% url 'ai_prediction' %}?institution_id={{ institution.id }}"
+                           class="institution-forecast-link">
+                            Выбрать время визита
+                        </a>
                     </div>
-
-                    <a
-                        href="{% url 'rate' %}?institution_id={{ institution.id }}"
-                        class="btn btn-secondary institution-action"
-                    >
-                        Сообщить о ситуации
-                    </a>
                 </article>
             {% empty %}
                 <p class="empty-state">
                     Учреждений по вашему запросу не найдено. Попробуйте изменить название или тип.
                 </p>
             {% endfor %}
+        </div>
         </div>
     </section>
     {{ map_institutions|json_script:"map-institutions-data" }}
@@ -189,5 +188,5 @@
         <script src="https://api-maps.yandex.ru/2.1/?apikey={{ yandex_maps_api_key|urlencode }}&amp;lang=ru_RU" defer></script>
     {% endif %}
 
-    <script src="{% static 'js/catalog-map.js' %}" defer></script>
+    <script src="{% static 'js/catalog-map.js' %}?v=layout-1" defer></script>
 {% endblock %}

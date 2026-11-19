@@ -7,6 +7,28 @@
     background: #ffffff;
 }
 
+.form-section > .eyebrow {
+    display: inline-block;
+    margin: 0 0 14px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    background: #ede9fe;
+    color: #3730a3;
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.status-fieldset > legend {
+    margin-bottom: 12px;
+    padding: 0;
+}
+
+.rate-form .form-select:disabled {
+    color: #475467;
+    opacity: 1;
+}
+
 .form-section .section-title {
     margin: 0 0 14px;
     color: #17324d;

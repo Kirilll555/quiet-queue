@@ -357,3 +357,58 @@
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+.catalog-layout {
+    display: grid;
+    gap: 20px;
+}
+
+.catalog-layout > .institution-grid {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1001px) {
+    .catalog-layout:has(> #institution-map-panel:not([hidden])) {
+        grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+        align-items: start;
+    }
+
+    #institution-list {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    #institution-map-panel {
+        grid-column: 2;
+        grid-row: 1;
+        min-width: 0;
+    }
+
+    .catalog-view-switch {
+        display: none;
+    }
+}
+
+.institution-queue,
+.institution-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+}
+
+.institution-queue {
+    min-width: 0;
+    color: var(--color-muted);
+}
+
+.institution-actions {
+    margin-top: auto;
+}
+
+.institution-forecast-link {
+    padding: 10px 2px;
+    color: var(--color-primary-hover);
+    font-weight: 700;
+    text-underline-offset: 3px;
+}

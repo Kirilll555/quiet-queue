@@ -259,8 +259,11 @@ def suggest_institution(request):
 
 
 def ai_prediction(request):
-    submitted = bool(request.GET)
-    form = ForecastForm(request.GET if submitted else None)
+    submitted = "visit_date" in request.GET
+    form = ForecastForm(
+        request.GET if submitted else None,
+        initial={"institution_id": request.GET.get("institution_id")},
+    )
     forecast = None
     institution = None
     cabinet = None

@@ -16,17 +16,18 @@
 
     <main class="main-content">
         {% if messages %}
-    <div class="flash-messages" aria-live="polite">
-        {% for message in messages %}
-            <p
-                class="flash-message flash-message--{{ message.tags }}"
-                {% if message.tags == "error" %}role="alert"{% else %}role="status"{% endif %}
-            >
-                {{ message }}
-            </p>
-        {% endfor %}
-    </div>
-{% endif %}
+            <div class="flash-messages" aria-live="polite">
+                {% for message in messages %}
+                    <p
+                        class="flash-message flash-message--{{ message.tags }}"
+                        {% if message.tags == "error" %}role="alert"{% else %}role="status"{% endif %}
+                    >
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {% block content %}
         {% endblock %}
     </main>
@@ -34,6 +35,6 @@
     <footer class="site-footer">
         <p>© 2026 Тихая очередь. Учебный проект.</p>
     </footer>
-
+    <script src="{% static 'js/navigation.js' %}" defer></script>
 </body>
 </html>
