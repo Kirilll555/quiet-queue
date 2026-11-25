@@ -24,10 +24,10 @@ jobs:
 
     steps:
       - name: Download repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.14"
           cache: pip
@@ -62,7 +62,7 @@ jobs:
     env:
       DJANGO_SECRET_KEY: ci-only-54e79b136ca02d86f9150f444b0e4a6754b7aa0ac21c824e
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build and start application
         run: docker compose up -d --build --wait --wait-timeout 120
       - name: Check application and styling
