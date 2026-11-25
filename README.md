@@ -49,6 +49,7 @@ py -m venv .venv
 ```powershell
 .\.venv\Scripts\python.exe -m pip install --upgrade pip
 .\.venv\Scripts\python.exe -m pip install "Django==6.1.3"
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
 ### 4. Подготовка базы

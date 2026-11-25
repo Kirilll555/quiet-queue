@@ -3,7 +3,7 @@ from .models import Institution, QueueReport, InstitutionRequest, Cabinet
 
 @admin.register(Institution)
 class InstitutionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'category', 'address', 'working_hours')
+    list_display = ('id', 'name', 'category', 'address', 'working_hours', 'latitude', 'longitude')
     search_fields = ('name', 'address')
 
 @admin.register(Cabinet)
@@ -13,7 +13,7 @@ class CabinetAdmin(admin.ModelAdmin):
 
 @admin.register(QueueReport)
 class QueueReportAdmin(admin.ModelAdmin):
-    list_display = ('institution', 'cabinet', 'queue_level', 'created_at')
+    list_display = ('institution', 'cabinet', 'user', 'queue_level', 'created_at')
     list_filter = ('queue_level', 'institution', 'cabinet')
 
 @admin.register(InstitutionRequest)
