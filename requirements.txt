@@ -1,0 +1,45 @@
+-e git+https://github.com/Skaredin-Artemii/lab_04.git@5112f8b305634219153816da5f6b85a0b92f4e24#egg=algopack
+-e git+https://github.com/Skaredin-Artemii/lab_04.git@5112f8b305634219153816da5f6b85a0b92f4e24#egg=algorithmic_package
+asgiref==3.13.0
+blinker==1.9.0
+brotli==1.2.1
+-e git+https://github.com/Skaredin-Artemii/lab_03.git@59ae56b82549d0f216891e7fa6c50eb4b142fb01#egg=catalog
+certifi==2026.7.22
+charset-normalizer==3.5.2
+click==8.5.0
+colorama==0.4.6
+contourpy==1.4.0
+cycler==0.12.1
+dj-database-url==3.1.2
+Django==6.1.3
+Flask==3.1.3
+fonttools==4.68.0
+idna==3.20
+iniconfig==2.3.0
+itsdangerous==2.2.0
+Jinja2==3.1.6
+kiwisolver==1.5.1
+lxml==6.1.3
+MarkupSafe==3.0.4
+matplotlib==3.11.2
+numpy==2.5.4
+packaging==26.3
+pillow==13.0.0
+pluggy==1.6.0
+psycopg2-binary==2.9.13
+Pygments==2.21.0
+pypandoc_binary==1.17
+pyparsing==3.3.3
+pytest==9.1.1
+python-dateutil==4.0.0
+python-docx==1.2.0
+requests==2.34.2
+ruff==0.16.9
+sqlparse==0.6.1
+-e git+https://github.com/Skaredin-Artemii/lab_02.git@233c7f661d2c7f6e6fc9597b5c978370d7f78f29#egg=streamstats
+-e git+https://github.com/Skaredin-Artemii/lab_01.git@e470a6d67496b5407719294f71b38f9a61ab6e98#egg=toolkit
+typing_extensions==4.16.0
+tzdata==2026.6
+urllib3==2.8.0
+Werkzeug==3.1.9
+whitenoise==6.12.0
