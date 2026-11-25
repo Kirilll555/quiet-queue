@@ -6,6 +6,7 @@ on:
       - main
       - development
       - devops
+      - devops-ci-cd
       - "devops/**"
   pull_request:
     branches:
