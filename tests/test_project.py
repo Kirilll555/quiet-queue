@@ -20,18 +20,6 @@ def test_migrations_current():
 
 
 @pytest.mark.django_db
-@pytest.mark.xfail(
-    strict=True,
-    raises=pytest.RaisesExc(
-        AttributeError,
-        check=lambda exc: (
-            exc.name == "Command"
-            and getattr(exc.obj, "__name__", "")
-            == "pages.management.commands.seed_data"
-        ),
-    ),
-    reason="BUG-01: в seed_data нет класса Command",
-)
 def test_seed_command():
     assert get_commands()["seed_data"] == "pages"
     call_command("seed_data")
