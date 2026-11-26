@@ -9,7 +9,10 @@ https://docs.djangoproject.com/en/6.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
+
+from django.core.exceptions import ImproperlyConfigured
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,6 +28,7 @@ SECRET_KEY = 'django-insecure-)vh=^d#9+yf6ox)pt%gvm+nz%ycom97s$upkp@6*gv2@g45h6*
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
 
 # Application definition
 

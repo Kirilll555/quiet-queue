@@ -1,0 +1,48 @@
+.reading-mode-toggle {
+    margin-bottom: 20px;
+}
+
+.reading-mode-toggle[hidden] {
+    display: none;
+}
+
+:root[data-reading-mode="on"] {
+    --color-primary: #28206e;
+    --color-primary-hover: #1b1552;
+    --color-primary-soft: #ede9fe;
+    --color-background: #ffffff;
+    --color-text: #111827;
+    --color-muted: #344054;
+    --color-border: #667085;
+    --color-focus: #261a86;
+    font-size: 125%;
+}
+
+[data-reading-mode="on"] .reading-mode-toggle[aria-pressed="true"] {
+    background: var(--color-primary);
+    color: #ffffff;
+}
+
+[data-reading-mode="on"] :is(
+    .hero-description,
+    .form-description,
+    .form-hint,
+    .forecast-note,
+    .auth-description,
+    .auth-switch,
+    .institution-category,
+    .institution-address,
+    .institution-hours,
+    .institution-card-details p
+) {
+    color: var(--color-muted);
+}
+
+[data-reading-mode="on"] :is(input:not([type="hidden"]), select, textarea) {
+    border-color: var(--color-border);
+}
+
+[data-reading-mode="on"] .main-content a:not(.btn) {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+}
