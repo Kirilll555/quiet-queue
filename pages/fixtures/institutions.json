@@ -1,0 +1,179 @@
+[
+{
+  "model": "pages.institution",
+  "pk": 3,
+  "fields": {
+    "name": "\u0413\u0411\u0423 \u0420\u0414 \"\u041f\u043e\u043b\u0438\u043a\u043b\u0438\u043d\u0438\u043a\u0430 \u21161\"",
+    "category": "\u041f\u043e\u043b\u0438\u043a\u043b\u0438\u043d\u0438\u043a\u0430",
+    "address": "\u0443\u043b. \u041b\u0430\u043f\u0442\u0438\u0435\u0432\u0430, 89, \u043a\u043e\u0440\u043f. 1, \u041c\u0430\u0445\u0430\u0447\u043a\u0430\u043b\u0430",
+    "working_hours": "08:00 - 19:00",
+    "latitude": "42.964399",
+    "longitude": "47.551161"
+  }
+},
+{
+  "model": "pages.institution",
+  "pk": 4,
+  "fields": {
+    "name": "\u0413\u0411\u0423 \u0420\u0414 \"\u041f\u043e\u043b\u0438\u043a\u043b\u0438\u043d\u0438\u043a\u0430 \u21164\"",
+    "category": "\u041f\u043e\u043b\u0438\u043a\u043b\u0438\u043d\u0438\u043a\u0430",
+    "address": "\u0443\u043b. \u041f\u0438\u0440\u043e\u0433\u043e\u0432\u0430, 3, \u041c\u0430\u0445\u0430\u0447\u043a\u0430\u043b\u0430",
+    "working_hours": "08:00 - 19:00",
+    "latitude": "42.971636",
+    "longitude": "47.505176"
+  }
+},
+{
+  "model": "pages.institution",
+  "pk": 5,
+  "fields": {
+    "name": "\u041c\u0424\u0426 \u041c\u043e\u0438 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b",
+    "category": "\u041c\u0424\u0426",
+    "address": "\u043f\u0440. \u041d\u0430\u0441\u0440\u0443\u0442\u0434\u0438\u043d\u043e\u0432\u0430, 1, \u041c\u0430\u0445\u0430\u0447\u043a\u0430\u043b\u0430",
+    "working_hours": "08:00 - 20:00",
+    "latitude": "42.957649",
+    "longitude": "47.555688"
+  }
+},
+{
+  "model": "pages.institution",
+  "pk": 6,
+  "fields": {
+    "name": "\u041c\u043e\u0438 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b, \u0424\u0413\u0410\u0423 \u0420\u0414 \u041c\u0424\u0426 \u0432 \u0420\u0414 \u043f\u043e \u0433\u043e\u0440\u043e\u0434\u0443 \u041c\u0430\u0445\u0430\u0447\u043a\u0430\u043b\u0430",
+    "category": "\u041c\u0424\u0426",
+    "address": "\u0443\u043b. \u041c\u0430\u0433\u043e\u043c\u0435\u0442\u0430 \u0413\u0430\u0434\u0436\u0438\u0435\u0432\u0430, 73\u0410, \u041c\u0430\u0445\u0430\u0447\u043a\u0430\u043b\u0430",
+    "working_hours": "08:00 - 20:00",
+    "latitude": "42.990005",
+    "longitude": "47.485521"
+  }
+},
+{
+  "model": "pages.institution",
+  "pk": 7,
+  "fields": {
+    "name": "\u041e\u0442\u0434\u0435\u043b\u0435\u043d\u0438\u0435 \u043f\u043e\u0447\u0442\u043e\u0432\u043e\u0439 \u0441\u0432\u044f\u0437\u0438 \u2116 367001",
+    "category": "\u041f\u043e\u0447\u0442\u0430",
+    "address": "\u0443\u043b. \u042d\u043c\u0438\u0440\u043e\u0432\u0430, 6\u0412, \u041c\u0430\u0445\u0430\u0447\u043a\u0430\u043b\u0430",
+    "working_hours": "08:00 - 17:00",
+    "latitude": "42.986740",
+    "longitude": "47.504906"
+  }
+},
+{
+  "model": "pages.cabinet",
+  "pk": 2,
+  "fields": {
+    "institution": 3,
+    "name": "\u041a\u0430\u0431\u0438\u043d\u0435\u0442 \u21161 (\u0422\u0435\u0440\u0430\u043f\u0435\u0432\u0442)",
+    "cabinet_type": "\u041f\u0440\u0438\u0435\u043c"
+  }
+},
+{
+  "model": "pages.cabinet",
+  "pk": 3,
+  "fields": {
+    "institution": 3,
+    "name": "\u041a\u0430\u0431\u0438\u043d\u0435\u0442 \u21162 (\u0425\u0438\u0440\u0443\u0440\u0433)",
+    "cabinet_type": "\u041f\u0440\u0438\u0435\u043c"
+  }
+},
+{
+  "model": "pages.cabinet",
+  "pk": 4,
+  "fields": {
+    "institution": 3,
+    "name": "\u041a\u0430\u0431\u0438\u043d\u0435\u0442 \u21163 (\u041e\u043a\u0443\u043b\u0438\u0441\u0442)",
+    "cabinet_type": "\u041f\u0440\u0438\u0435\u043c"
+  }
+},
+{
+  "model": "pages.cabinet",
+  "pk": 5,
+  "fields": {
+    "institution": 4,
+    "name": "\u041a\u0430\u0431\u0438\u043d\u0435\u0442 \u21161 (\u0422\u0435\u0440\u0430\u043f\u0435\u0432\u0442)",
+    "cabinet_type": "\u041f\u0440\u0438\u0435\u043c"
+  }
+},
+{
+  "model": "pages.cabinet",
+  "pk": 6,
+  "fields": {
+    "institution": 4,
+    "name": "\u041a\u0430\u0431\u0438\u043d\u0435\u0442 \u21162 (\u0421\u0442\u043e\u043c\u0430\u0442\u043e\u043b\u043e\u0433)",
+    "cabinet_type": "\u041f\u0440\u0438\u0435\u043c"
+  }
+},
+{
+  "model": "pages.cabinet",
+  "pk": 7,
+  "fields": {
+    "institution": 5,
+    "name": "\u041e\u043a\u043d\u043e \u21161",
+    "cabinet_type": "\u041f\u0440\u0438\u0435\u043c"
+  }
+},
+{
+  "model": "pages.cabinet",
+  "pk": 8,
+  "fields": {
+    "institution": 5,
+    "name": "\u041e\u043a\u043d\u043e \u21162",
+    "cabinet_type": "\u041f\u0440\u0438\u0435\u043c"
+  }
+},
+{
+  "model": "pages.cabinet",
+  "pk": 9,
+  "fields": {
+    "institution": 5,
+    "name": "\u041e\u043a\u043d\u043e \u21163",
+    "cabinet_type": "\u041f\u0440\u0438\u0435\u043c"
+  }
+},
+{
+  "model": "pages.cabinet",
+  "pk": 10,
+  "fields": {
+    "institution": 5,
+    "name": "\u041e\u043a\u043d\u043e \u21164",
+    "cabinet_type": "\u041f\u0440\u0438\u0435\u043c"
+  }
+},
+{
+  "model": "pages.cabinet",
+  "pk": 11,
+  "fields": {
+    "institution": 6,
+    "name": "\u041e\u043a\u043d\u043e \u21161",
+    "cabinet_type": "\u041f\u0440\u0438\u0435\u043c"
+  }
+},
+{
+  "model": "pages.cabinet",
+  "pk": 12,
+  "fields": {
+    "institution": 6,
+    "name": "\u041e\u043a\u043d\u043e \u21162",
+    "cabinet_type": "\u041f\u0440\u0438\u0435\u043c"
+  }
+},
+{
+  "model": "pages.cabinet",
+  "pk": 13,
+  "fields": {
+    "institution": 7,
+    "name": "\u041e\u043a\u043d\u043e \u043f\u0440\u0438\u0435\u043c\u0430",
+    "cabinet_type": "\u041f\u0440\u0438\u0435\u043c"
+  }
+},
+{
+  "model": "pages.cabinet",
+  "pk": 14,
+  "fields": {
+    "institution": 7,
+    "name": "\u041e\u043a\u043d\u043e \u0432\u044b\u0434\u0430\u0447\u0438",
+    "cabinet_type": "\u041f\u0440\u0438\u0435\u043c"
+  }
+}
+]
