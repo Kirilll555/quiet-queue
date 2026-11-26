@@ -33,6 +33,7 @@ echo "Database backup saved: $backup"
 
 # Migration failure leaves the old app running. Schema changes need compatible migrations.
 "${compose[@]}" run --rm --no-deps web python manage.py migrate --noinput
+"${compose[@]}" run --rm --no-deps web python manage.py load_institutions
 "${compose[@]}" up -d --no-build --wait --wait-timeout 180
 curl --fail --show-error --silent --max-time 15 http://127.0.0.1:8000/healthz/
 printf '\n'
