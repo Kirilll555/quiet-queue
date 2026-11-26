@@ -1,0 +1,3 @@
+services:
+  web:
+    image: ${APP_IMAGE:?Set APP_IMAGE to the tested release image}

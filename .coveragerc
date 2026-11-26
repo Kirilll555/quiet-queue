@@ -1,0 +1,4 @@
+[run]
+branch = True
+source = pages, config, manage
+omit = pages/templates/pages/tests/*

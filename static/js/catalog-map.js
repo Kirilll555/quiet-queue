@@ -63,7 +63,7 @@
                 [institution.latitude, institution.longitude],
                 15
             );
-        } else {
+        } else if (institutions.length > 1) {
             map.setBounds(map.geoObjects.getBounds(), {
                 checkZoomRange: true,
                 zoomMargin: 30,
@@ -87,13 +87,10 @@
             return;
         }
 
-        if (institutions.length === 0) {
-            mapElement.hidden = true;
-            mapMessage.textContent = "Для найденных учреждений пока нет координат. Воспользуйтесь списком.";
-            return;
-        }
-
-        mapMessage.textContent = `Учреждений на карте: ${institutions.length}.`;
+        mapElement.hidden = false;
+        mapMessage.textContent = institutions.length === 0
+            ? "Учреждения пока не добавлены. Показана карта Махачкалы."
+            : `Учреждений на карте: ${institutions.length}.`;
 
         try {
             if (map === null) {
