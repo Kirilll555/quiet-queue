@@ -152,6 +152,8 @@ STATICFILES_DIRS = [
 ]
 
 YANDEX_MAPS_API_KEY = os.environ.get("YANDEX_MAPS_API_KEY", "")
+YANDEXGPT_API_KEY = os.environ.get("YANDEXGPT_API_KEY", "")
+YANDEXGPT_FOLDER_ID = os.environ.get("YANDEXGPT_FOLDER_ID", "")
 
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "index"

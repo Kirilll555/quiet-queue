@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
 
@@ -60,7 +61,7 @@ class QueueReport(models.Model):
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name="reports")
     cabinet = models.ForeignKey(Cabinet, on_delete=models.SET_NULL, null=True, blank=True, related_name="reports")
     queue_level = models.CharField(max_length=6, choices=QUEUE_LEVEL_CHOICES)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ["-created_at"]
