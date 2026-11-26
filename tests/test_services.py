@@ -81,7 +81,9 @@ def test_foreign_room(now, room):
 def test_whole_future_hours(now, place, days, expected):
     place.working_hours = "8:30 — 12:15 (демо)"
     result = build_visit_forecast(
-        institution=place, visit_date=now.date() + timedelta(days=days)
+        institution=place,
+        visit_date=now.date() + timedelta(days=days),
+        now=now,
     )
     assert [slot["start"] for slot in result["slots"]] == expected
     assert all(slot["label"] == "Недостаточно данных" for slot in result["slots"])

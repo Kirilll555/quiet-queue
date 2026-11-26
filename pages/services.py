@@ -70,8 +70,11 @@ QUEUE_SCORES = {
 }
 
 
-def build_visit_forecast(*, institution, visit_date, cabinet=None):
-    now = timezone.localtime()
+def build_visit_forecast(*, institution, visit_date, cabinet=None, now=None):
+    # now=None — обычный режим (берём реальное время);
+    # в тестах можно передать замоканное время фикстурой.
+    if now is None:
+        now = timezone.localtime()
     today = now.date()
 
     if visit_date < today:
@@ -90,7 +93,7 @@ def build_visit_forecast(*, institution, visit_date, cabinet=None):
 
     hours_match = re.fullmatch(
         r"\s*(\d{1,2}):(\d{2})\s*[-–—]\s*"
-        r"(\d{1,2}):(\d{2})(?:\s*$демо$)?\s*",
+        r"(\d{1,2}):(\d{2})(?:\s*[(]\s*демо\s*[)])?\s*",
         institution.working_hours,
     )
 
