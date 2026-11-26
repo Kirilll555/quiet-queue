@@ -11,3 +11,5 @@ db.sqlite3-journal
 .DS_Store
 Thumbs.db
 *.log
+staticfiles/
+*.sqlite3-*
