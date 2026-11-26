@@ -135,3 +135,19 @@
         width: 100%;
     }
 }
+
+.ai-comment {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: #f0f4ff;
+}
+
+.ai-comment h3 {
+    margin: 0 0 8px;
+    font-size: 1rem;
+}
+
+.ai-comment p {
+    margin: 0;
+}
