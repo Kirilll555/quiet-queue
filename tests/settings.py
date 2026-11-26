@@ -17,3 +17,10 @@ DATABASES = {
 }
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 YANDEX_MAPS_API_KEY = ""
+
+STORAGES = {
+    **STORAGES,
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}

@@ -154,7 +154,9 @@ def test_map_mock(open_page, settings, count):
             else:
                 assert page.evaluate("window.boundsSet")
         else:
-            expect(page.locator("#map-message")).to_contain_text("нет координат")
+            expect(page.locator("#map-message")).to_contain_text(
+                "Учреждения пока не добавлены"
+            )
         page.locator("#show-list").click()
         expect(page.locator("#institution-list")).to_be_visible()
         page.set_viewport_size({"width": 1280, "height": 800})
