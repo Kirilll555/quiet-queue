@@ -9,12 +9,30 @@
     <link rel="stylesheet" href="{% static 'css/base_styles.css' %}">
 
     {% block extra_css %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/reading_mode.css' %}">
+    <script src="{% static 'js/reading-mode.js' %}" defer></script>
 </head>
 <body>
-
+    <a class="skip-link" href="#main-content">Перейти к содержимому</a>
     {% include 'menu.html' %}
 
-    <main class="main-content">
+    <main class="main-content" id="main-content" tabindex="-1">
+        <button type="button" class="btn btn-secondary reading-mode-toggle" id="reading-mode-toggle" aria-pressed="false" hidden>
+            Версия для слабовидящих
+        </button>
+        {% if messages %}
+            <div class="flash-messages" aria-live="polite">
+                {% for message in messages %}
+                    <p
+                        class="flash-message flash-message--{{ message.tags }}"
+                        {% if message.tags == "error" %}role="alert"{% else %}role="status"{% endif %}
+                    >
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {% block content %}
         {% endblock %}
     </main>
@@ -22,6 +40,6 @@
     <footer class="site-footer">
         <p>© 2026 Тихая очередь. Учебный проект.</p>
     </footer>
-
+    <script src="{% static 'js/navigation.js' %}" defer></script>
 </body>
 </html>

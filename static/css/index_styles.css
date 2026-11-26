@@ -1,0 +1,414 @@
+/* Вступительный блок главной страницы */
+.hero-section {
+    padding: clamp(28px, 5vw, 56px);
+    border: 1px solid #dfe5eb;
+    border-radius: 20px;
+    background: #ffffff;
+}
+
+.eyebrow {
+    margin: 0 0 10px;
+    color: #086b63;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.hero-title {
+    max-width: 760px;
+    margin: 0 0 16px;
+    color: #17324d;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.12;
+}
+
+.hero-description {
+    max-width: 760px;
+    margin: 0 0 24px;
+    color: #475467;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.demo-notice {
+    margin: 24px 0 0;
+    padding: 14px 16px;
+    border-left: 4px solid #d99a18;
+    border-radius: 6px;
+    background: #fff7e3;
+    color: #59400b;
+    line-height: 1.5;
+}
+
+/* Заголовок и сетка каталога */
+.institutions-section {
+    margin-top: 48px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    margin: 0;
+    color: #17324d;
+    font-size: clamp(1.6rem, 3vw, 2rem);
+}
+
+.section-heading > p {
+    margin: 0 0 3px;
+    color: #52606d;
+}
+
+.institution-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+}
+
+/* Карточка учреждения */
+.institution-card {
+    display: flex;
+    flex-direction: column;
+    padding: 22px;
+    border: 1px solid #dfe5eb;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgb(23 50 77 / 5%);
+}
+
+.institution-card-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.institution-category {
+    color: #52606d;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.institution-name {
+    margin: 18px 0;
+    color: #17324d;
+    font-size: 1.25rem;
+    line-height: 1.35;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    flex: 0 0 9px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.status-pill--low {
+    background: #e8f5ec;
+    color: #17643a;
+}
+
+.status-pill--medium {
+    background: #fff4d6;
+    color: #765000;
+}
+
+.status-pill--high {
+    background: #fdecea;
+    color: #9b2c23;
+}
+
+.status-pill--unknown {
+    background: #edf0f2;
+    color: #475467;
+}
+
+.institution-card-details {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.institution-card-details p {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 6px 14px;
+    margin: 0;
+    color: #52606d;
+    font-size: 0.95rem;
+}
+
+.institution-card-details strong {
+    color: #1d2939;
+}
+
+.institution-action {
+    width: 100%;
+    margin-top: auto;
+}
+
+.empty-state {
+    padding: 24px;
+    border: 1px dashed #b8ccca;
+    border-radius: 12px;
+    color: #52606d;
+}
+
+/* На телефоне заголовок каталога располагается над пояснением */
+@media (max-width: 600px) {
+    .institutions-section {
+        margin-top: 32px;
+    }
+
+    .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .institution-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* Поиск и фильтрация учреждений */
+.catalog-filters {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto auto;
+    align-items: end;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 24px;
+    border: 1px solid #dfe5eb;
+    border-radius: 16px;
+    background: #ffffff;
+}
+
+.catalog-filters label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    color: #17324d;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.catalog-filters input,
+.catalog-filters select {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding: 11px 12px;
+    border: 1px solid #b8ccca;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #1d2939;
+    font: inherit;
+    font-weight: 400;
+}
+
+.catalog-filters input::placeholder {
+    color: #667085;
+}
+
+.catalog-filters input:focus-visible,
+.catalog-filters select:focus-visible {
+    outline: 3px solid #f2a900;
+    outline-offset: 2px;
+}
+
+.catalog-filters .btn {
+    min-height: 48px;
+}
+
+/* Дополнительные сведения об учреждении */
+.institution-address,
+.institution-hours {
+    margin: 0 0 10px;
+    color: #52606d;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.institution-cabinets {
+    margin: 4px 0 20px;
+    padding-top: 12px;
+    border-top: 1px solid #edf0f2;
+    color: #52606d;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* Сообщение занимает всю ширину каталога */
+.empty-state {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+/* На средней ширине поля и кнопки располагаются в два ряда */
+@media (max-width: 900px) {
+    .catalog-filters {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* На телефоне элементы располагаются друг под другом */
+@media (max-width: 600px) {
+    .catalog-filters {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 18px;
+    }
+
+    .catalog-filters .btn {
+        width: 100%;
+    }
+}
+
+.institution-cabinets summary {
+    padding: 8px 0;
+    color: #164e63;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.cabinet-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.cabinet-item {
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+    min-width: 0;
+    padding: 14px;
+    border: 1px solid #dfe5eb;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.cabinet-item > span {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.general-queue-label {
+    margin: 0 0 12px;
+    color: #52606d;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.catalog-view-switch {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+#institution-list[hidden],
+#institution-map-panel[hidden],
+#institution-map[hidden] {
+    display: none;
+}
+
+#institution-map {
+    height: clamp(320px, 60vh, 560px);
+    width: 100%;
+    border: 1px solid #dfe5eb;
+    border-radius: 16px;
+    z-index: 0;
+}
+
+.map-note,
+#map-message {
+    color: #52606d;
+    line-height: 1.5;
+}
+
+.catalog-view-switch .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.catalog-layout {
+    display: grid;
+    gap: 20px;
+}
+
+.catalog-layout > .institution-grid {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1001px) {
+    .catalog-layout:has(> #institution-map-panel:not([hidden])) {
+        grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+        align-items: start;
+    }
+
+    #institution-list {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    #institution-map-panel {
+        grid-column: 2;
+        grid-row: 1;
+        min-width: 0;
+    }
+
+    .catalog-view-switch {
+        display: none;
+    }
+}
+
+.institution-queue,
+.institution-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+}
+
+.institution-queue {
+    min-width: 0;
+    color: var(--color-muted);
+}
+
+.institution-actions {
+    margin-top: auto;
+}
+
+.institution-forecast-link {
+    padding: 10px 2px;
+    color: var(--color-primary-hover);
+    font-weight: 700;
+    text-underline-offset: 3px;
+}

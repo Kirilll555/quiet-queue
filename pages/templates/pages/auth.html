@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/auth_styles.css' %}">
+{% endblock %}
+
+{% block title %}
+    {% if is_signup %}Регистрация{% else %}Вход{% endif %} — Тихая очередь
+{% endblock %}
+
+{% block content %}
+    <section class="auth-section">
+        <h1>
+            {% if is_signup %}Создать аккаунт{% else %}Войти{% endif %}
+        </h1>
+
+        <p class="auth-description">
+            {% if is_signup %}
+                Нужны только ник и пароль.
+                Сохраните пароль: восстановление через почту или телефон пока недоступно.
+            {% else %}
+                Введите ник и пароль своего аккаунта.
+            {% endif %}
+        </p>
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary">
+                {% if is_signup %}Зарегистрироваться{% else %}Войти{% endif %}
+            </button>
+        </form>
+
+        <p class="auth-switch">
+            {% if is_signup %}
+                Уже есть аккаунт?
+                <a href="{% url 'login' %}">Войти</a>
+            {% else %}
+                Ещё нет аккаунта?
+                <a href="{% url 'signup' %}">Зарегистрироваться</a>
+            {% endif %}
+        </p>
+    </section>
+{% endblock %}

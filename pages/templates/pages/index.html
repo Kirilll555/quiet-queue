@@ -2,19 +2,191 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/index_styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/index_styles.css' %}?v=layout-1">
 {% endblock %}
 
 {% block title %}Главная — Тихая очередь{% endblock %}
 
 {% block content %}
     <section class="hero-section">
-        <h1 class="hero-title">Тихая очередь</h1>
-        <p class="hero-description">Узнайте реальную загруженность поликлиник и МФЦ. Планируйте визит, когда нет очередей.</p>
-        <a href="{% url 'suggest' %}" class="btn btn-secondary">Предложить учреждение</a>
+        <p class="eyebrow">Махачкала · социальные учреждения</p>
+        <h1 class="hero-title">Планируйте визит спокойнее</h1>
+        <p class="hero-description">
+            Посмотрите демонстрационную загруженность учреждений
+            и сообщите другим посетителям о ситуации в очереди.
+        </p>
+
+        <div class="hero-actions">
+            <a href="#institutions" class="btn btn-primary">
+                Найти учреждение
+            </a>
+            <a href="{% url 'suggest' %}" class="btn btn-secondary">
+                Предложить учреждение
+            </a>
+        </div>
+
+        <p class="demo-notice">
+            <strong>Демо-режим.</strong>
+            Показанные статусы и отметки учебные и не отражают реальную ситуацию.
+        </p>
     </section>
 
-    <section class="institutions-section">
-        <h2 class="section-title">Сейчас рядом с вами</h2>
+    <section class="institutions-section" id="institutions">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Каталог</p>
+                <h2 class="section-title">Учреждения</h2>
+            </div>
+            <p>Выберите место, чтобы сообщить о загруженности.</p>
+        </div>
+
+        <form method="get" action="{% url 'index' %}#institutions" class="catalog-filters">
+            <label>
+                Название учреждения
+                <input type="search" name="q" value="{{ query }}" placeholder="Например, Центральный">
+            </label>
+
+            <label>
+                Тип учреждения
+                <select name="category">
+                    <option value="">Все</option>
+                    <option value="Поликлиника" {% if category == "Поликлиника" %}selected{% endif %}>
+                        Поликлиники
+                    </option>
+                    <option value="МФЦ" {% if category == "МФЦ" %}selected{% endif %}>
+                        МФЦ
+                    </option>
+                </select>
+            </label>
+
+            <button type="submit" class="btn btn-primary">Найти</button>
+            <a href="{% url 'index' %}#institutions" class="btn btn-secondary">Сбросить</a>
+        </form>
+
+        <div class="catalog-view-switch" role="group" aria-label="Представление каталога">
+            <button
+                type="button"
+                id="show-list"
+                class="btn btn-primary"
+                aria-pressed="true"
+                aria-controls="institution-list"
+            >
+                Список
+            </button>
+            <button
+                type="button"
+                id="show-map"
+                class="btn btn-secondary"
+                aria-pressed="false"
+                aria-controls="institution-map-panel"
+                disabled
+            >
+                Карта
+            </button>
+        </div>
+
+        <div class="catalog-layout">
+
+        <div id="institution-map-panel" hidden>
+            <p id="map-message" role="status"></p>
+            <div id="institution-map" aria-label="Карта учреждений"></div>
+            <p class="map-note">
+                Показаны учреждения с заполненными координатами.
+                Демоучреждения обозначают условные места.
+                Статус в маркере относится к общей очереди без кабинета.
+            </p>
+        </div>
+
+        <div class="institution-grid" id="institution-list">
+            {% for institution in institutions %}
+                <article class="institution-card">
+                    <div class="institution-card-top">
+                        <span class="institution-category">
+                            {{ institution.category }}
+                        </span>
+                        <div class="institution-queue">
+                            <span>Общая очередь:</span>
+                            <span class="status-pill status-pill--{{ institution.queue_level }}">
+                                <span class="status-dot" aria-hidden="true"></span>
+                                {{ institution.queue_label }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <h3 class="institution-name">{{ institution.name }}</h3>
+
+                    <p class="institution-address">📍 {{ institution.address }}</p>
+                    <p class="institution-hours">🕒 {{ institution.working_hours }}</p>
+
+                    <details class="institution-cabinets">
+                        <summary>Очереди по кабинетам</summary>
+
+                        <div class="cabinet-list">
+                            {% for cabinet in institution.queue_cabinets %}
+                                <div class="cabinet-item">
+                                    <strong>{{ cabinet.name }}</strong>
+
+                                    {% if cabinet.cabinet_type %}
+                                        <span>{{ cabinet.cabinet_type }}</span>
+                                    {% endif %}
+
+                                    <span class="status-pill status-pill--{{ cabinet.queue_level }}">
+                                        <span class="status-dot" aria-hidden="true"></span>
+                                        {{ cabinet.queue_label }}
+                                    </span>
+
+                                    <span>
+                                        {% if cabinet.reports_count %}
+                                            Последняя отметка: {{ cabinet.updated_label }}.
+                                            Учтено аккаунтов за час: {{ cabinet.reports_count }}.
+                                        {% else %}
+                                            {{ cabinet.updated_label }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            {% empty %}
+                                <p>Кабинеты пока не добавлены.</p>
+                            {% endfor %}
+                        </div>
+                    </details>
+
+                    {% if institution.reports_count %}
+                        <div class="institution-card-details">
+                            <p>
+                                <span>Последняя отметка</span>
+                                <strong>{{ institution.updated_label }}</strong>
+                            </p>
+                            <p>
+                                <span>Учтено аккаунтов за час</span>
+                                <strong>{{ institution.reports_count }}</strong>
+                            </p>
+                        </div>
+                    {% endif %}
+
+                    <div class="institution-actions">
+                        <a href="{% url 'rate' %}?institution_id={{ institution.id }}"
+                           class="btn btn-primary">
+                            Оценить очередь
+                        </a>
+                        <a href="{% url 'ai_prediction' %}?institution_id={{ institution.id }}"
+                           class="institution-forecast-link">
+                            Выбрать время визита
+                        </a>
+                    </div>
+                </article>
+            {% empty %}
+                <p class="empty-state">
+                    Учреждений по вашему запросу не найдено. Попробуйте изменить название или тип.
+                </p>
+            {% endfor %}
+        </div>
+        </div>
     </section>
+    {{ map_institutions|json_script:"map-institutions-data" }}
+
+    {% if yandex_maps_api_key %}
+        <script src="https://api-maps.yandex.ru/2.1/?apikey={{ yandex_maps_api_key|urlencode }}&amp;lang=ru_RU" defer></script>
+    {% endif %}
+
+    <script src="{% static 'js/catalog-map.js' %}?v=layout-1" defer></script>
 {% endblock %}

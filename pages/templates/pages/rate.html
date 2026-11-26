@@ -2,32 +2,112 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/rate_styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rate_styles.css' %}?v=2">
 {% endblock %}
 
-{% block title %}Оценить очередь{% endblock %}
+{% block title %}Оценить очередь — Тихая очередь{% endblock %}
 
 {% block content %}
     <section class="form-section">
-        <h1 class="section-title">Оценить загруженность</h1>
+        <p class="eyebrow">Демо-режим</p>
+        <h1 class="section-title">Сообщить о загруженности</h1>
+        <p class="form-description">
+            Выберите учреждение и укажите, насколько сейчас загружена очередь.
+        </p>
+
         <form method="post" class="rate-form">
             {% csrf_token %}
+
             <div class="form-group">
-                <label class="form-label">Выберите учреждение:</label>
-                <select class="form-select">
-                    <option>Поликлиника №3</option>
-                    <option>МФЦ Центральный</option>
-                    <option>Почтовое отделение №12</option>
+                <label for="institution_id" class="form-label">
+                    Учреждение
+                </label>
+
+                <select
+                    id="institution_id"
+                    name="institution_id"
+                    class="form-select"
+                    required
+                >
+                    <option value="" {% if not selected_institution_id %}selected{% endif %}>
+                        Выберите учреждение
+                    </option>
+
+                    {% for inst in institutions %}
+                        <option
+                            value="{{ inst.id }}"
+                            {% if selected_institution_id|stringformat:"s" == inst.id|stringformat:"s" %}selected{% endif %}
+                        >
+                            {{ inst.name }} ({{ inst.category }})
+                        </option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="form-group">
-                <p class="form-label">Сколько сейчас людей?</p>
-                <div class="status-buttons">
-                    <button type="submit" name="status" value="green" class="btn btn-status-green">Спокойно</button>
-                    <button type="submit" name="status" value="yellow" class="btn btn-status-yellow">Средне</button>
-                    <button type="submit" name="status" value="red" class="btn btn-status-red">Много людей</button>
-                </div>
+                <label for="cabinet_id" class="form-label">
+                    Кабинет — необязательно
+                </label>
+
+                <select
+                    id="cabinet_id"
+                    name="cabinet_id"
+                    class="form-select"
+                    aria-describedby="cabinet-hint"
+                    data-selected-cabinet="{{ selected_cabinet_id }}"
+                    disabled
+                >
+                    <option value="">Сначала выберите учреждение</option>
+                </select>
+
+                <p id="cabinet-hint" class="form-hint" aria-live="polite">
+                    Можно оставить отметку без указания кабинета.
+                </p>
+
+                <noscript>
+                    Выбор кабинета требует JavaScript.
+                    Без него можно отправить отметку для учреждения.
+                </noscript>
             </div>
+            <fieldset class="form-group status-fieldset">
+                <legend class="form-label">
+                    Какова сейчас загруженность?
+                </legend>
+
+                <div class="status-buttons">
+                    <button
+                        type="submit"
+                        name="queue_level"
+                        value="low"
+                        class="btn btn-status-low"
+                        aria-label="Отметить небольшую очередь"
+                    >
+                        Небольшая очередь
+                    </button>
+
+                    <button
+                        type="submit"
+                        name="queue_level"
+                        value="medium"
+                        class="btn btn-status-medium"
+                        aria-label="Отметить умеренную очередь"
+                    >
+                        Умеренная очередь
+                    </button>
+
+                    <button
+                        type="submit"
+                        name="queue_level"
+                        value="high"
+                        class="btn btn-status-high"
+                        aria-label="Отметить много людей"
+                    >
+                        Много людей
+                    </button>
+                </div>
+            </fieldset>
         </form>
     </section>
+
+    {{ cabinets_data|json_script:"cabinets-data" }}
+    <script src="{% static 'js/rate.js' %}" defer></script>
 {% endblock %}
