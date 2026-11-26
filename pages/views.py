@@ -11,7 +11,7 @@ from django.db import OperationalError
 from .services import submit_queue_report, REPORT_COOLDOWN_MINUTES
 from .models import Cabinet, Institution, QueueReport, InstitutionRequest
 from .forms import SignUpForm, ForecastForm
-from .services import build_visit_forecast
+from .services import build_visit_forecast, build_ai_comment
 
 
 def index(request):
@@ -268,6 +268,7 @@ def ai_prediction(request):
     institution = None
     cabinet = None
     visit_date = None
+    ai_comment = None
 
     if submitted and form.is_valid():
         institution = form.cleaned_data["institution_id"]
@@ -279,6 +280,13 @@ def ai_prediction(request):
             cabinet=cabinet,
             visit_date=visit_date,
         )
+
+        if forecast and not forecast["error"]:
+            ai_comment = build_ai_comment(
+                institution=institution,
+                visit_date=visit_date,
+                cabinet=cabinet,
+            )
 
     cabinets_data = list(
         Cabinet.objects.order_by("name").values(
@@ -293,7 +301,9 @@ def ai_prediction(request):
         "cabinet": cabinet,
         "visit_date": visit_date,
         "cabinets_data": cabinets_data,
+        "ai_comment": ai_comment,
     })
+
 
 def register(request):
     if request.user.is_authenticated:

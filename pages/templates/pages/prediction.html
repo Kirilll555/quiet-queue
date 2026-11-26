@@ -104,6 +104,13 @@
                             </table>
                         </div>
                     {% endif %}
+
+                    {% if ai_comment %}
+                        <div class="ai-comment">
+                            <h3>Совет от ИИ</h3>
+                            <p>{{ ai_comment|linebreaksbr }}</p>
+                        </div>
+                    {% endif %}
                 {% endif %}
 
                 <p class="forecast-note">

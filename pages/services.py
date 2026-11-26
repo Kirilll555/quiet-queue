@@ -1,5 +1,9 @@
 from datetime import timedelta
+import json
+import os
 import re
+import urllib.request
+
 from django.db import transaction
 from django.utils import timezone
 
@@ -86,7 +90,7 @@ def build_visit_forecast(*, institution, visit_date, cabinet=None):
 
     hours_match = re.fullmatch(
         r"\s*(\d{1,2}):(\d{2})\s*[-–—]\s*"
-        r"(\d{1,2}):(\d{2})(?:\s*\(демо\))?\s*",
+        r"(\d{1,2}):(\d{2})(?:\s*$демо$)?\s*",
         institution.working_hours,
     )
 
@@ -216,3 +220,97 @@ def build_visit_forecast(*, institution, visit_date, cabinet=None):
         "slots": slots,
         "best_slot": best_slot,
     }
+
+
+STATS_DAYS = 14
+OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
+OLLAMA_MODEL = "qwen2.5:3b"
+
+
+def collect_queue_stats(*, institution, cabinet=None):
+    since = timezone.now() - timedelta(days=STATS_DAYS)
+    reports = QueueReport.objects.filter(
+        institution=institution,
+        created_at__gte=since,
+        user__isnull=False,
+    )
+    if cabinet is not None:
+        reports = reports.filter(cabinet=cabinet)
+
+    buckets = {}
+    for report in reports.iterator():
+        local = timezone.localtime(report.created_at)
+        key = (local.weekday(), local.hour)
+        buckets.setdefault(key, []).append(QUEUE_SCORES[report.queue_level])
+
+    lines = []
+    for (weekday, hour), scores in sorted(buckets.items()):
+        avg = sum(scores) / len(scores)
+        level = "низкая" if avg < 1.5 else ("средняя" if avg < 2.5 else "высокая")
+        lines.append(
+            f"День {weekday}, {hour:02d}:00 — загруженность {level} "
+            f"(средний балл {avg:.1f}, отчётов: {len(scores)})"
+        )
+
+    return "\n".join(lines) or "Данных об очередях пока нет."
+
+
+def ask_ollama(prompt):
+    payload = {
+        "model": OLLAMA_MODEL,
+        "stream": False,
+        "messages": [
+            {
+                "role": "system",
+                "content": (
+                    "Ты — помощник сервиса quiet-queue, который помогает людям "
+                    "выбрать удачное время для визита в учреждения Махачкалы. "
+                    "Тебе дают статистику загруженности по дням недели и часам. "
+                    "Отвечай кратко (3–5 предложений), по-русски, без выдумывания "
+                    "фактов, которых нет в данных."
+                ),
+            },
+            {"role": "user", "content": prompt},
+        ],
+        "options": {
+            "temperature": 0.3,
+            "num_predict": 400,
+        },
+    }
+
+    try:
+        request = urllib.request.Request(
+            f"{OLLAMA_URL}/api/chat",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+        )
+        with urllib.request.urlopen(request, timeout=60) as response:
+            data = json.loads(response.read().decode("utf-8"))
+    except Exception:
+        return None
+
+    return data.get("message", {}).get("content")
+
+
+def build_ai_comment(*, institution, visit_date, cabinet=None):
+    stats = collect_queue_stats(
+        institution=institution,
+        cabinet=cabinet,
+    )
+    if stats == "Данных об очередях пока нет.":
+        return None
+
+    weekday_names = ["понедельник", "вторник", "среда", "четверг",
+                     "пятница", "суббота", "воскресенье"]
+    prompt = (
+        f"Учреждение: {institution.name} ({institution.category}), "
+        f"часы работы {institution.working_hours}.\n"
+        f"Пользователь планирует визит: {weekday_names[visit_date.weekday()]}, "
+        f"{visit_date.strftime('%d.%m.%Y')}.\n\n"
+        f"Статистика загруженности за последние {STATS_DAYS} дней:\n{stats}\n\n"
+        "Проанализируй статистику и подскажи: в какие часы идти выгоднее всего, "
+        "каких часов избегать и на что обратить внимание. "
+        "Обращайся к пользователю на «вы»."
+    )
+
+    return ask_ollama(prompt)

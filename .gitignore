@@ -31,3 +31,4 @@ test-results/
 
 staticfiles/
 *.sqlite3-*
+*.exe
