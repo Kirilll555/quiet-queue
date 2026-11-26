@@ -19,9 +19,11 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
 from pages import views as pages_views
+from .health import health
 
 
 urlpatterns = [
+    path("healthz/", health, name="health"),
     path("admin/", admin.site.urls),
     path(
         "accounts/login/",

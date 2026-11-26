@@ -1,0 +1,29 @@
+services:
+  web:
+    environment:
+      DJANGO_ALLOWED_HOSTS: "${SITE_DOMAIN:-lev.art184.fvds.ru},localhost,127.0.0.1"
+      DJANGO_CSRF_TRUSTED_ORIGINS: "https://${SITE_DOMAIN:-lev.art184.fvds.ru}"
+      DJANGO_HTTPS: "true"
+  proxy:
+    image: caddy:2-alpine
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:-lev.art184.fvds.ru}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      web:
+        condition: service_healthy
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+volumes:
+  caddy_data:
+  caddy_config:

@@ -28,3 +28,6 @@ qa-results/
 playwright-report/
 test-results/
 .aws/
+
+staticfiles/
+*.sqlite3-*
