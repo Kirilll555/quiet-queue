@@ -89,7 +89,7 @@ jobs:
           docker compose up -d --wait --wait-timeout 120
           docker compose exec -T web python manage.py shell -c "from pages.models import Institution; assert Institution.objects.filter(name='CI persistence probe').exists()"
       - name: Package the tested image
-        if: github.ref == 'refs/heads/devops-ci-cd' && github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
           set -euo pipefail
           mkdir -p artifact
@@ -98,7 +98,7 @@ jobs:
           tar --exclude=__pycache__ -czf artifact/deploy.tar.gz compose.yaml compose.production.yaml compose.release.yaml Caddyfile deploy
           (cd artifact && sha256sum image.tar.gz deploy.tar.gz > SHA256SUMS)
       - name: Store release artifact
-        if: github.ref == 'refs/heads/devops-ci-cd' && github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v7
         with:
           name: release-${{ github.sha }}
@@ -115,7 +115,7 @@ jobs:
 
   deploy:
     needs: docker
-    if: github.ref == 'refs/heads/devops-ci-cd' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     concurrency:
@@ -127,7 +127,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          head=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/devops-ci-cd" --jq .object.sha)
+          head=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)
           if [ "$head" = "$GITHUB_SHA" ]; then
             echo 'deploy=true' >> "$GITHUB_OUTPUT"
           else
